@@ -1855,6 +1855,451 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .toast-error { border-left: 4px solid var(--rose); }
     .toast-warning { border-left: 4px solid var(--amber); }
     .toast-info { border-left: 4px solid var(--cyan); }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN (Tablets & Mobile Viewports)
+       ========================================================================== */
+
+    .tab-text-short { display: none; }
+    .team-name-short { display: none; }
+
+    @media (max-width: 900px) {
+      .matches-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* App Header 2-row layout */
+      header.app-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "brand actions"
+          "tabs tabs";
+        gap: 0.65rem 0.5rem;
+        padding: 0.65rem 0.85rem;
+      }
+
+      .brand-section {
+        grid-area: brand;
+        min-width: 0;
+        gap: 0.55rem;
+      }
+
+      .brand-emblem {
+        width: 32px;
+        height: 32px;
+      }
+
+      .brand-title {
+        font-size: 0.96rem;
+      }
+
+      .header-actions {
+        grid-area: actions;
+        gap: 0.4rem;
+      }
+
+      .tabs-group {
+        grid-area: tabs;
+        width: 100%;
+        margin: 0;
+        display: flex;
+        gap: 0.25rem;
+        padding: 0.2rem;
+      }
+
+      .tab-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 0.5rem 0.35rem;
+        font-size: 0.76rem;
+        min-height: 40px;
+        gap: 0.35rem;
+      }
+
+      .tab-text-full { display: none; }
+      .tab-text-short { display: inline; }
+
+      /* Main container spacing */
+      main.app-main {
+        padding: 0.75rem 0.75rem 5.5rem 0.75rem;
+      }
+
+      /* KPI summary grid: compact 2x2 widget */
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .kpi-card {
+        padding: 0.65rem 0.75rem;
+        gap: 0.55rem;
+        border-radius: var(--radius-sm);
+      }
+
+      .kpi-icon {
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        border-radius: 8px;
+      }
+
+      .kpi-icon .icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .kpi-label {
+        font-size: 0.68rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .kpi-val {
+        font-size: 1.15rem;
+        line-height: 1.15;
+      }
+
+      .kpi-sub {
+        display: none;
+      }
+
+      /* Controls Bar */
+      .control-bar {
+        padding: 0.65rem 0.75rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+        margin-bottom: 0.85rem;
+      }
+
+      .control-left {
+        width: 100%;
+        min-width: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .search-input-wrap {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .search-input-wrap input {
+        height: 40px;
+        font-size: 16px; /* Prevents auto-zoom on iOS */
+      }
+
+      /* Horizontal thumb swipe for week filters */
+      .filter-chips {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 0.35rem;
+        padding-bottom: 4px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .filter-chips::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-chip {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.75rem;
+        min-height: 32px;
+      }
+
+      .control-right {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding-top: 0.45rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      #matches-summary, #browser-summary {
+        font-size: 0.74rem;
+      }
+
+      /* Media Card Grid: 1 column full width cards */
+      .matches-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .game-card {
+        padding: 0.85rem;
+        border-radius: var(--radius-md);
+        gap: 0.65rem;
+      }
+
+      .matchup-box {
+        padding: 0.65rem 0.75rem;
+        gap: 0.45rem;
+      }
+
+      .team-item {
+        gap: 0.45rem;
+        min-width: 0;
+      }
+
+      .team-badge {
+        width: 30px;
+        height: 30px;
+        font-size: 0.68rem;
+      }
+
+      .team-name {
+        font-size: 0.82rem;
+      }
+
+      .versus-badge {
+        font-size: 0.68rem;
+        padding: 0.15rem 0.35rem;
+      }
+
+      /* Touch targets for card action buttons */
+      .card-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+      }
+
+      .added-date {
+        text-align: left;
+      }
+
+      .card-action-group {
+        display: flex;
+        width: 100%;
+        gap: 0.45rem;
+      }
+
+      .card-action-group .btn-action,
+      .card-action-group .btn-forget {
+        flex: 1;
+        justify-content: center;
+        padding: 0.55rem;
+        font-size: 0.78rem;
+        min-height: 40px;
+      }
+
+      #browser-cards-container .card-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+      }
+
+      #browser-cards-container .card-footer .btn-action {
+        width: 100%;
+        justify-content: center;
+        min-height: 40px;
+      }
+
+      #browser-cards-container .card-footer .btn-grab,
+      #browser-cards-container .card-footer .badge-grabbed {
+        width: 100%;
+        justify-content: center;
+        min-height: 42px;
+      }
+
+      /* Responsive Tables with Smooth Horizontal Scroll */
+      .table-view-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        border-radius: var(--radius-md);
+      }
+
+      table.data-table {
+        min-width: 620px;
+      }
+
+      table.data-table th,
+      table.data-table td {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.78rem;
+      }
+
+      /* Settings Form */
+      .settings-wrapper {
+        margin-bottom: 6rem;
+      }
+
+      .settings-panel {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+      }
+
+      .panel-header {
+        margin-bottom: 0.85rem;
+      }
+
+      .panel-header h3 {
+        font-size: 0.95rem;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+      }
+
+      .form-field input[type="text"],
+      .form-field input[type="number"],
+      .form-field input[type="password"],
+      .form-field select,
+      .form-field textarea {
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+        padding: 0.6rem 0.85rem;
+      }
+
+      .day-chips-row {
+        gap: 0.45rem;
+      }
+
+      .day-toggle-chip {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8rem;
+        min-width: 44px;
+        text-align: center;
+      }
+
+      .team-presets-row {
+        gap: 0.4rem;
+      }
+
+      .team-preset-tag {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.76rem;
+        min-height: 32px;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      /* Fixed Mobile Bottom Save Bar */
+      .save-toolbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        margin: 0;
+        border-radius: 0;
+        border-top: 1px solid var(--border-card);
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        padding: 0.75rem 1rem;
+        background: rgba(11, 15, 25, 0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6);
+      }
+
+      .save-toolbar .btn-save-primary {
+        flex: 1;
+        justify-content: center;
+        height: 44px;
+        font-size: 0.86rem;
+      }
+
+      .save-toolbar .btn-header {
+        height: 44px;
+        padding: 0 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      /* Extra small devices (iPhone SE, 360-390px screens) */
+
+      .brand-badge {
+        display: none;
+      }
+
+      .badge-status {
+        padding: 0.15rem 0.45rem;
+        font-size: 0.65rem;
+      }
+
+      .btn-header .btn-header-label {
+        display: none;
+      }
+
+      .btn-header {
+        padding: 0.45rem 0.6rem;
+        min-height: 36px;
+      }
+
+      .btn-main-trigger {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.76rem;
+        min-height: 36px;
+      }
+
+      .btn-dropdown-caret {
+        padding: 0.45rem 0.45rem;
+        min-height: 36px;
+      }
+
+      #run-btn-text {
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .team-name-full { display: none; }
+      .team-name-short { display: inline; }
+
+      .modal-overlay {
+        padding: 0.5rem;
+      }
+
+      .modal-box {
+        max-height: 90vh;
+      }
+
+      .modal-body {
+        padding: 1rem 0.85rem;
+      }
+
+      .diag-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+
+      .diag-item button {
+        width: 100%;
+        justify-content: center;
+        height: 38px;
+      }
+
+      #toast-container {
+        bottom: 5.5rem;
+        left: 0.75rem;
+        right: 0.75rem;
+      }
+
+      .toast {
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1881,7 +2326,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     <nav class="tabs-group">
       <button class="tab-btn active" data-tab="tab-matches">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span>Grabbed Matches</span>
+        <span class="tab-text-full">Grabbed Matches</span>
+        <span class="tab-text-short">Matches</span>
         <span class="tab-counter" id="tab-count-torrents">0</span>
       </button>
       <button class="tab-btn" data-tab="tab-browser">
@@ -1900,7 +2346,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       <!-- Diagnostics Modal Trigger -->
       <button class="btn-header" onclick="openDiagModal()" title="Run connectivity diagnostics">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        <span>Diagnostics</span>
+        <span class="btn-header-label">Diagnostics</span>
       </button>
 
       <!-- Execution Split Button -->
@@ -2462,16 +2908,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     };
 
     function resolveTeam(str) {
-      if (!str) return { code: 'NFL', name: 'NFL Team', color: '#1e293b' };
+      if (!str) return { code: 'NFL', name: 'NFL Team', short: 'NFL', color: '#1e293b' };
       const s = str.toLowerCase();
       for (const [key, t] of Object.entries(NFL_TEAMS)) {
         if (s.includes(key) || s.includes(t.code.toLowerCase()) || s.includes(t.name.toLowerCase())) {
-          return t;
+          return { ...t, short: t.name.split(' ').pop() };
         }
       }
       const words = str.trim().split(/\s+/);
       const code = words.length > 1 ? (words[0][0] + words[1][0]).toUpperCase() : str.substring(0, 3).toUpperCase();
-      return { code, name: str.trim(), color: '#1e293b' };
+      const short = words[words.length - 1];
+      return { code, name: str.trim(), short: short, color: '#1e293b' };
     }
 
     // State
@@ -2834,11 +3281,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="matchup-box">
             <div class="team-item">
               <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
-              <span class="team-name" title="${escapeHtml(awayTeam.name)}">${escapeHtml(awayTeam.name)}</span>
+              <span class="team-name" title="${escapeHtml(awayTeam.name)}">
+                <span class="team-name-full">${escapeHtml(awayTeam.name)}</span>
+                <span class="team-name-short">${escapeHtml(awayTeam.short || awayTeam.name)}</span>
+              </span>
             </div>
             <span class="versus-badge">@</span>
             <div class="team-item home">
-              <span class="team-name" title="${escapeHtml(homeTeam.name)}">${escapeHtml(homeTeam.name)}</span>
+              <span class="team-name" title="${escapeHtml(homeTeam.name)}">
+                <span class="team-name-full">${escapeHtml(homeTeam.name)}</span>
+                <span class="team-name-short">${escapeHtml(homeTeam.short || homeTeam.name)}</span>
+              </span>
               <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
             </div>
           </div>
@@ -3015,11 +3468,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           <div class="matchup-box">
             <div class="team-item">
               <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
-              <span class="team-name" title="${escapeHtml(awayTeam.name)}">${escapeHtml(awayTeam.name)}</span>
+              <span class="team-name" title="${escapeHtml(awayTeam.name)}">
+                <span class="team-name-full">${escapeHtml(awayTeam.name)}</span>
+                <span class="team-name-short">${escapeHtml(awayTeam.short || awayTeam.name)}</span>
+              </span>
             </div>
             <span class="versus-badge">@</span>
             <div class="team-item home">
-              <span class="team-name" title="${escapeHtml(homeTeam.name)}">${escapeHtml(homeTeam.name)}</span>
+              <span class="team-name" title="${escapeHtml(homeTeam.name)}">
+                <span class="team-name-full">${escapeHtml(homeTeam.name)}</span>
+                <span class="team-name-short">${escapeHtml(homeTeam.short || homeTeam.name)}</span>
+              </span>
               <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
             </div>
           </div>

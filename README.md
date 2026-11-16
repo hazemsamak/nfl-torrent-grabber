@@ -15,6 +15,13 @@ Featuring an **Active Week Match Browser** with **1-click selective downloads**,
 
 ## 📸 Visual Tour & Dashboard Showcase
 
+### 🏈 Grabbed Matches Library & Media Cards
+Browse your downloaded match library in a visual **Media Card Grid** or compact **Table View**. Shows matchup cards with official NFL team color branding, circular team badges, THUUZ excitement rating scores, release resolution/network tags, timestamps, direct forum links, and quick-forget actions.
+
+![Grabbed Matches Library](docs/screenshots/dashboard-grabbed-matches.png)
+
+---
+
 ### ⚡ Active Week Match Browser & Selective Downloads
 Inspect every match published for the active week sorted by THUUZ excitement rating. Download any individual match on-demand to qBittorrent with a single click, or check which games have already been grabbed.
 
@@ -29,10 +36,10 @@ Manage all grabber preferences, favorite teams, top match quotas, preferred vide
 
 ---
 
-### 🏈 Grabbed Matches Library & Media Cards
-Browse your downloaded match library in a visual **Media Card Grid** or compact **Table View**. Shows matchup cards with official NFL team color branding, circular team badges, THUUZ excitement rating scores, release resolution/network tags, timestamps, direct forum links, and quick-forget actions.
+### 📱 Mobile-First Responsive Experience
+Tailored for smartphones and tablets with a 2-row adaptive navigation header, 2x2 compact metric tiles, horizontal thumb-swipe week filter carousel, smart team nickname displays (`[KC] Chiefs @ Broncos [DEN]`), 40px+ touch targets, and a pinned bottom action bar for quick settings saves.
 
-![Grabbed Matches Library](docs/screenshots/dashboard-grabbed-matches.png)
+![Mobile Responsive Experience](docs/screenshots/dashboard-mobile.png)
 
 ---
 
@@ -102,6 +109,7 @@ Browse your downloaded match library in a visual **Media Card Grid** or compact 
 │   └── screenshots/                 # High-resolution dashboard screenshots
 │       ├── dashboard-active-week.png
 │       ├── dashboard-grabbed-matches.png
+│       ├── dashboard-mobile.png
 │       └── dashboard-settings.png
 ├── scripts/                         # Standalone testing & utility scripts
 │   └── test_scrape.py               # Standalone 720pier forum scraping tester
