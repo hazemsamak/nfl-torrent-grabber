@@ -1188,8 +1188,39 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .team-badge {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 21, 35, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 3px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease;
+    }
+
+    .team-badge:hover {
+      transform: scale(1.08);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .team-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+      pointer-events: none;
+    }
+
+    .team-fallback-initials {
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -1197,9 +1228,6 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       font-weight: 800;
       font-size: 0.72rem;
       color: #fff;
-      flex-shrink: 0;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .team-name {
@@ -2871,54 +2899,94 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
   <div id="toast-container"></div>
 
   <script>
-    // NFL Team Directory with official branding colors & abbreviations
+    // NFL Team Directory with official branding colors, ESPN logo slugs & nicknames
     const NFL_TEAMS = {
-      'cardinals': { code: 'ARI', name: 'Arizona Cardinals', color: '#97233F' },
-      'falcons': { code: 'ATL', name: 'Atlanta Falcons', color: '#A71930' },
-      'ravens': { code: 'BAL', name: 'Baltimore Ravens', color: '#241773' },
-      'bills': { code: 'BUF', name: 'Buffalo Bills', color: '#00338D' },
-      'panthers': { code: 'CAR', name: 'Carolina Panthers', color: '#0085CA' },
-      'bears': { code: 'CHI', name: 'Chicago Bears', color: '#0B162A' },
-      'bengals': { code: 'CIN', name: 'Cincinnati Bengals', color: '#FB4F14' },
-      'browns': { code: 'CLE', name: 'Cleveland Browns', color: '#311D00' },
-      'cowboys': { code: 'DAL', name: 'Dallas Cowboys', color: '#003594' },
-      'broncos': { code: 'DEN', name: 'Denver Broncos', color: '#FB4F14' },
-      'lions': { code: 'DET', name: 'Detroit Lions', color: '#0076B6' },
-      'packers': { code: 'GB', name: 'Green Bay Packers', color: '#203731' },
-      'texans': { code: 'HOU', name: 'Houston Texans', color: '#03202F' },
-      'colts': { code: 'IND', name: 'Indianapolis Colts', color: '#002C5F' },
-      'jaguars': { code: 'JAX', name: 'Jacksonville Jaguars', color: '#006778' },
-      'chiefs': { code: 'KC', name: 'Kansas City Chiefs', color: '#E31837' },
-      'raiders': { code: 'LV', name: 'Las Vegas Raiders', color: '#000000' },
-      'chargers': { code: 'LAC', name: 'Los Angeles Chargers', color: '#0080C6' },
-      'rams': { code: 'LAR', name: 'Los Angeles Rams', color: '#003594' },
-      'dolphins': { code: 'MIA', name: 'Miami Dolphins', color: '#008E97' },
-      'vikings': { code: 'MIN', name: 'Minnesota Vikings', color: '#4F2683' },
-      'patriots': { code: 'NE', name: 'New England Patriots', color: '#002244' },
-      'saints': { code: 'NO', name: 'New Orleans Saints', color: '#D3BC8D' },
-      'giants': { code: 'NYG', name: 'New York Giants', color: '#0B2265' },
-      'jets': { code: 'NYJ', name: 'New York Jets', color: '#125740' },
-      'eagles': { code: 'PHI', name: 'Philadelphia Eagles', color: '#004C54' },
-      'steelers': { code: 'PIT', name: 'Pittsburgh Steelers', color: '#FFB612' },
-      '49ers': { code: 'SF', name: 'San Francisco 49ers', color: '#AA0000' },
-      'seahawks': { code: 'SEA', name: 'Seattle Seahawks', color: '#002244' },
-      'buccaneers': { code: 'TB', name: 'Tampa Bay Buccaneers', color: '#D50A0A' },
-      'titans': { code: 'TEN', name: 'Tennessee Titans', color: '#0C2340' },
-      'commanders': { code: 'WAS', name: 'Washington Commanders', color: '#5A1414' },
+      'cardinals': { code: 'ARI', espn: 'ari', name: 'Arizona Cardinals', nickname: 'cardinals', city: 'arizona', color: '#97233F', aliases: ['ari', 'cardinals', 'arizona cardinals'] },
+      'falcons': { code: 'ATL', espn: 'atl', name: 'Atlanta Falcons', nickname: 'falcons', city: 'atlanta', color: '#A71930', aliases: ['atl', 'falcons', 'atlanta falcons'] },
+      'ravens': { code: 'BAL', espn: 'bal', name: 'Baltimore Ravens', nickname: 'ravens', city: 'baltimore', color: '#241773', aliases: ['bal', 'ravens', 'baltimore ravens'] },
+      'bills': { code: 'BUF', espn: 'buf', name: 'Buffalo Bills', nickname: 'bills', city: 'buffalo', color: '#00338D', aliases: ['buf', 'bills', 'buffalo bills'] },
+      'panthers': { code: 'CAR', espn: 'car', name: 'Carolina Panthers', nickname: 'panthers', city: 'carolina', color: '#0085CA', aliases: ['car', 'panthers', 'carolina panthers'] },
+      'bears': { code: 'CHI', espn: 'chi', name: 'Chicago Bears', nickname: 'bears', city: 'chicago', color: '#0B162A', aliases: ['chi', 'bears', 'chicago bears'] },
+      'bengals': { code: 'CIN', espn: 'cin', name: 'Cincinnati Bengals', nickname: 'bengals', city: 'cincinnati', color: '#FB4F14', aliases: ['cin', 'bengals', 'cincinnati bengals'] },
+      'browns': { code: 'CLE', espn: 'cle', name: 'Cleveland Browns', nickname: 'browns', city: 'cleveland', color: '#311D00', aliases: ['cle', 'browns', 'cleveland browns'] },
+      'cowboys': { code: 'DAL', espn: 'dal', name: 'Dallas Cowboys', nickname: 'cowboys', city: 'dallas', color: '#003594', aliases: ['dal', 'cowboys', 'dallas cowboys'] },
+      'broncos': { code: 'DEN', espn: 'den', name: 'Denver Broncos', nickname: 'broncos', city: 'denver', color: '#FB4F14', aliases: ['den', 'broncos', 'denver broncos'] },
+      'lions': { code: 'DET', espn: 'det', name: 'Detroit Lions', nickname: 'lions', city: 'detroit', color: '#0076B6', aliases: ['det', 'lions', 'detroit lions'] },
+      'packers': { code: 'GB', espn: 'gb', name: 'Green Bay Packers', nickname: 'packers', city: 'green bay', color: '#203731', aliases: ['gb', 'packers', 'green bay packers'] },
+      'texans': { code: 'HOU', espn: 'hou', name: 'Houston Texans', nickname: 'texans', city: 'houston', color: '#03202F', aliases: ['hou', 'texans', 'houston texans'] },
+      'colts': { code: 'IND', espn: 'ind', name: 'Indianapolis Colts', nickname: 'colts', city: 'indianapolis', color: '#002C5F', aliases: ['ind', 'colts', 'indianapolis colts'] },
+      'jaguars': { code: 'JAX', espn: 'jax', name: 'Jacksonville Jaguars', nickname: 'jaguars', city: 'jacksonville', color: '#006778', aliases: ['jax', 'jags', 'jaguars', 'jacksonville jaguars'] },
+      'chiefs': { code: 'KC', espn: 'kc', name: 'Kansas City Chiefs', nickname: 'chiefs', city: 'kansas city', color: '#E31837', aliases: ['kc', 'chiefs', 'kansas city', 'kansas city chiefs'] },
+      'raiders': { code: 'LV', espn: 'lv', name: 'Las Vegas Raiders', nickname: 'raiders', city: 'las vegas', color: '#000000', aliases: ['lv', 'raiders', 'las vegas raiders'] },
+      'chargers': { code: 'LAC', espn: 'lac', name: 'Los Angeles Chargers', nickname: 'chargers', city: 'los angeles chargers', color: '#0080C6', aliases: ['lac', 'chargers', 'la chargers', 'los angeles chargers'] },
+      'rams': { code: 'LAR', espn: 'lar', name: 'Los Angeles Rams', nickname: 'rams', city: 'los angeles rams', color: '#003594', aliases: ['lar', 'rams', 'la rams', 'los angeles rams'] },
+      'dolphins': { code: 'MIA', espn: 'mia', name: 'Miami Dolphins', nickname: 'dolphins', city: 'miami', color: '#008E97', aliases: ['mia', 'dolphins', 'miami dolphins'] },
+      'vikings': { code: 'MIN', espn: 'min', name: 'Minnesota Vikings', nickname: 'vikings', city: 'minnesota', color: '#4F2683', aliases: ['min', 'vikings', 'minnesota vikings'] },
+      'patriots': { code: 'NE', espn: 'ne', name: 'New England Patriots', nickname: 'patriots', city: 'new england', color: '#002244', aliases: ['ne', 'pats', 'patriots', 'new england patriots'] },
+      'saints': { code: 'NO', espn: 'no', name: 'New Orleans Saints', nickname: 'saints', city: 'new orleans', color: '#D3BC8D', aliases: ['no', 'saints', 'new orleans saints'] },
+      'giants': { code: 'NYG', espn: 'nyg', name: 'New York Giants', nickname: 'giants', city: 'new york giants', color: '#0B2265', aliases: ['nyg', 'giants', 'ny giants', 'new york giants'] },
+      'jets': { code: 'NYJ', espn: 'nyj', name: 'New York Jets', nickname: 'jets', city: 'new york jets', color: '#125740', aliases: ['nyj', 'jets', 'ny jets', 'new york jets'] },
+      'eagles': { code: 'PHI', espn: 'phi', name: 'Philadelphia Eagles', nickname: 'eagles', city: 'philadelphia', color: '#004C54', aliases: ['phi', 'eagles', 'philadelphia eagles'] },
+      'steelers': { code: 'PIT', espn: 'pit', name: 'Pittsburgh Steelers', nickname: 'steelers', city: 'pittsburgh', color: '#FFB612', aliases: ['pit', 'steelers', 'pittsburgh steelers'] },
+      '49ers': { code: 'SF', espn: 'sf', name: 'San Francisco 49ers', nickname: '49ers', city: 'san francisco', color: '#AA0000', aliases: ['sf', 'niners', '49ers', 'san francisco 49ers'] },
+      'seahawks': { code: 'SEA', espn: 'sea', name: 'Seattle Seahawks', nickname: 'seahawks', city: 'seattle', color: '#002244', aliases: ['sea', 'seahawks', 'seattle seahawks'] },
+      'buccaneers': { code: 'TB', espn: 'tb', name: 'Tampa Bay Buccaneers', nickname: 'buccaneers', city: 'tampa bay', color: '#D50A0A', aliases: ['tb', 'bucs', 'buccaneers', 'tampa bay', 'tampa bay buccaneers'] },
+      'titans': { code: 'TEN', espn: 'ten', name: 'Tennessee Titans', nickname: 'titans', city: 'tennessee', color: '#0C2340', aliases: ['ten', 'titans', 'tennessee titans'] },
+      'commanders': { code: 'WAS', espn: 'wsh', name: 'Washington Commanders', nickname: 'commanders', city: 'washington', color: '#5A1414', aliases: ['was', 'wsh', 'commanders', 'washington commanders'] }
     };
 
     function resolveTeam(str) {
-      if (!str) return { code: 'NFL', name: 'NFL Team', short: 'NFL', color: '#1e293b' };
-      const s = str.toLowerCase();
+      if (!str) return {
+        code: 'NFL',
+        name: 'NFL Team',
+        short: 'NFL',
+        color: '#1e293b',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nfl.png'
+      };
+      const s = str.toLowerCase().trim();
+
+      // 1. Exact match on full name or nickname
       for (const [key, t] of Object.entries(NFL_TEAMS)) {
-        if (s.includes(key) || s.includes(t.code.toLowerCase()) || s.includes(t.name.toLowerCase())) {
-          return { ...t, short: t.name.split(' ').pop() };
+        if (s === t.name.toLowerCase() || s === t.nickname.toLowerCase()) {
+          return { ...t, short: t.nickname.charAt(0).toUpperCase() + t.nickname.slice(1), logo: `https://a.espncdn.com/i/teamlogos/nfl/500/${t.espn}.png` };
         }
       }
+
+      // 2. Whole-word / token match on nickname or full name
+      for (const [key, t] of Object.entries(NFL_TEAMS)) {
+        const nickRegex = new RegExp(`(^|[^a-z0-9])${t.nickname}([^a-z0-9]|$)`, 'i');
+        if (nickRegex.test(s) || s.includes(t.name.toLowerCase())) {
+          return { ...t, short: t.nickname.charAt(0).toUpperCase() + t.nickname.slice(1), logo: `https://a.espncdn.com/i/teamlogos/nfl/500/${t.espn}.png` };
+        }
+      }
+
+      // 3. Standalone city match (e.g. "Kansas City" or "Green Bay")
+      for (const [key, t] of Object.entries(NFL_TEAMS)) {
+        if (t.city && t.city.length > 2 && s.includes(t.city.toLowerCase())) {
+          return { ...t, short: t.nickname.charAt(0).toUpperCase() + t.nickname.slice(1), logo: `https://a.espncdn.com/i/teamlogos/nfl/500/${t.espn}.png` };
+        }
+      }
+
+      // 4. Aliases as whole word tokens (e.g. \bkc\b, \bchi\b, \bgb\b)
+      for (const [key, t] of Object.entries(NFL_TEAMS)) {
+        for (const alias of t.aliases) {
+          const aliasRegex = new RegExp(`(^|[^a-z0-9])${alias}([^a-z0-9]|$)`, 'i');
+          if (aliasRegex.test(s)) {
+            return { ...t, short: t.nickname.charAt(0).toUpperCase() + t.nickname.slice(1), logo: `https://a.espncdn.com/i/teamlogos/nfl/500/${t.espn}.png` };
+          }
+        }
+      }
+
       const words = str.trim().split(/\s+/);
       const code = words.length > 1 ? (words[0][0] + words[1][0]).toUpperCase() : str.substring(0, 3).toUpperCase();
       const short = words[words.length - 1];
-      return { code, name: str.trim(), short: short, color: '#1e293b' };
+      return {
+        code,
+        name: str.trim(),
+        short: short,
+        color: '#1e293b',
+        logo: 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/leagues/500/nfl.png'
+      };
     }
 
     // State
@@ -3280,7 +3348,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
           <div class="matchup-box">
             <div class="team-item">
-              <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
+              <div class="team-badge" title="${escapeHtml(awayTeam.name)}">
+                <img class="team-logo-img" src="${awayTeam.logo}" alt="${escapeHtml(awayTeam.name)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="team-fallback-initials" style="display:none; background-color: ${awayTeam.color};">${awayTeam.code}</span>
+              </div>
               <span class="team-name" title="${escapeHtml(awayTeam.name)}">
                 <span class="team-name-full">${escapeHtml(awayTeam.name)}</span>
                 <span class="team-name-short">${escapeHtml(awayTeam.short || awayTeam.name)}</span>
@@ -3292,7 +3363,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
                 <span class="team-name-full">${escapeHtml(homeTeam.name)}</span>
                 <span class="team-name-short">${escapeHtml(homeTeam.short || homeTeam.name)}</span>
               </span>
-              <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
+              <div class="team-badge" title="${escapeHtml(homeTeam.name)}">
+                <img class="team-logo-img" src="${homeTeam.logo}" alt="${escapeHtml(homeTeam.name)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="team-fallback-initials" style="display:none; background-color: ${homeTeam.color};">${homeTeam.code}</span>
+              </div>
             </div>
           </div>
 
@@ -3467,7 +3541,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
           <div class="matchup-box">
             <div class="team-item">
-              <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
+              <div class="team-badge" title="${escapeHtml(awayTeam.name)}">
+                <img class="team-logo-img" src="${awayTeam.logo}" alt="${escapeHtml(awayTeam.name)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="team-fallback-initials" style="display:none; background-color: ${awayTeam.color};">${awayTeam.code}</span>
+              </div>
               <span class="team-name" title="${escapeHtml(awayTeam.name)}">
                 <span class="team-name-full">${escapeHtml(awayTeam.name)}</span>
                 <span class="team-name-short">${escapeHtml(awayTeam.short || awayTeam.name)}</span>
@@ -3479,7 +3556,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
                 <span class="team-name-full">${escapeHtml(homeTeam.name)}</span>
                 <span class="team-name-short">${escapeHtml(homeTeam.short || homeTeam.name)}</span>
               </span>
-              <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
+              <div class="team-badge" title="${escapeHtml(homeTeam.name)}">
+                <img class="team-logo-img" src="${homeTeam.logo}" alt="${escapeHtml(homeTeam.name)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                <span class="team-fallback-initials" style="display:none; background-color: ${homeTeam.color};">${homeTeam.code}</span>
+              </div>
             </div>
           </div>
 
