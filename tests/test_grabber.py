@@ -982,7 +982,7 @@ class TestNFLGrabber(unittest.TestCase):
 
         # 2. Verify Grabbed Matches is active and default view
         self.assertIn("data-tab=\"tab-matches\"", HTML_TEMPLATE)
-        self.assertIn("data-tab=\"tab-history\"", HTML_TEMPLATE)
+        self.assertNotIn("data-tab=\"tab-history\"", HTML_TEMPLATE)
         self.assertIn("tab-pane active\" id=\"tab-matches\"", HTML_TEMPLATE)
 
         # 3. Test HTTP handler status endpoint

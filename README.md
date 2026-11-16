@@ -29,17 +29,10 @@ Manage all grabber preferences, favorite teams, top match quotas, preferred vide
 
 ---
 
-### 🏈 Grabbed Matches Library
-View all downloaded matches across past and current weeks, complete with THUUZ rating scores, timestamps, release titles, direct forum links, and quick-forget actions.
+### 🏈 Grabbed Matches Library & Media Cards
+Browse your downloaded match library in a visual **Media Card Grid** or compact **Table View**. Shows matchup cards with official NFL team color branding, circular team badges, THUUZ excitement rating scores, release resolution/network tags, timestamps, direct forum links, and quick-forget actions.
 
 ![Grabbed Matches Library](docs/screenshots/dashboard-grabbed-matches.png)
-
----
-
-### 📜 Run History & Execution Diagnostics
-Monitor past automated and manual runs, execution durations, added torrent counts, and error logs with real-time status updates and built-in diagnostic test buttons.
-
-![Run History & Execution Diagnostics](docs/screenshots/dashboard-run-history.png)
 
 ---
 
@@ -109,7 +102,6 @@ Monitor past automated and manual runs, execution durations, added torrent count
 │   └── screenshots/                 # High-resolution dashboard screenshots
 │       ├── dashboard-active-week.png
 │       ├── dashboard-grabbed-matches.png
-│       ├── dashboard-run-history.png
 │       └── dashboard-settings.png
 ├── scripts/                         # Standalone testing & utility scripts
 │   └── test_scrape.py               # Standalone 720pier forum scraping tester
@@ -226,11 +218,11 @@ The embedded dashboard provides complete operational visibility and control:
 
 | Tab / View | Functionality |
 | :--- | :--- |
-| **⚡ Active Week Matches** | Live browser for current week games parsed from 720pier, showing THUUZ excitement rating badges, matchup names, favorite team tags, and **1-click selective download buttons**. |
-| **⚙️ Settings Management** | Interactive form to configure all grabber preferences and credentials. Saves to `.env` and **hot-reloads** running schedulers in memory. |
-| **🏈 Grabbed Matches** | Filterable list of all grabbed torrents with rating scores, timestamps, release titles, and quick links. |
-| **📜 Run History** | Historical execution log displaying start/end times, execution duration, status (`SUCCESS`, `NO_TORRENTS`, `ERROR`), and error diagnostics. |
-| **Toolbar Actions** | Built-in test buttons (`🔌 Test qBit`, `🌐 Test 720pier`, `🔔 Send Alert`) and split execution trigger (`▶ Run Check Now` / `🧪 Dry Run`). |
+| **🏈 Grabbed Matches** | Visual **Media Card Grid** & compact **Table View** of all grabbed torrents with official team colors, badges, Thuuz excitement rating scores, release specs (`1080p`, `720p`, `60 FPS`, network tags), timestamps, and quick links. |
+| **⚡ Active Week Matches** | Live fixture browser for current week games parsed from 720pier, showing THUUZ excitement rating badges, matchup names, favorite team tags, and **1-click selective download buttons**. |
+| **⚙️ Settings Management** | Interactive form to configure grabber preferences, 1-click favorite team tags, clickable day toggles, and credentials. Saves to `.env` and **hot-reloads** running schedulers in memory. |
+| **🔌 Subsystem Diagnostics** | Interactive diagnostics modal to test qBittorrent connectivity, 720pier forum session cookies, and dispatch test notifications to Discord and Telegram. |
+| **Header Actions** | Real-time status indicator with live pulse, Diagnostics modal launcher, and split execution trigger (`▶ Run Check Now` / `🧪 Dry Run`). |
 
 ### REST API Endpoints
 

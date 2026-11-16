@@ -533,58 +533,57 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NFL Grabber &mdash; Dashboard &amp; Control Center</title>
+  <title>NFL Grabber &mdash; Automation &amp; Control Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090d16;
-      --bg-surface: #111827;
-      --bg-surface-elevated: #1a2234;
-      --bg-surface-hover: #222d44;
-      --bg-input: #0d1322;
+      --bg: #080b12;
+      --bg-surface: #0f1523;
+      --bg-card: #141c2e;
+      --bg-card-hover: #19233a;
+      --bg-input: #0a0f1a;
       --border: rgba(255, 255, 255, 0.08);
       --border-card: rgba(255, 255, 255, 0.12);
-      --border-focus: #38bdf8;
+      --border-hover: rgba(56, 189, 248, 0.4);
+      --cyan: #38bdf8;
+      --cyan-glow: rgba(56, 189, 248, 0.25);
+      --indigo: #6366f1;
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.2);
+      --amber: #f59e0b;
+      --amber-glow: rgba(245, 158, 11, 0.2);
+      --rose: #f43f5e;
+      --purple: #a855f7;
       --text: #f8fafc;
       --text-secondary: #94a3b8;
       --muted: #64748b;
-      --cyan: #38bdf8;
-      --cyan-glow: rgba(56, 189, 248, 0.2);
-      --green: #10b981;
-      --green-glow: rgba(16, 185, 129, 0.2);
-      --orange: #f59e0b;
-      --pink: #ec4899;
-      --purple: #8b5cf6;
-      --red: #f43f5e;
-      --yellow: #eab308;
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
+      --radius-xl: 18px;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.55);
+      --shadow-glow: 0 0 20px rgba(56, 189, 248, 0.15);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
-      height: 100%;
-      height: 100vh;
-      height: 100dvh;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-
-    body {
+      min-height: 100%;
       background-color: var(--bg);
       color: var(--text);
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     /* SVG Icon Helper */
@@ -603,33 +602,34 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .icon-sm { width: 14px; height: 14px; }
     .icon-lg { width: 20px; height: 20px; }
 
-    /* Header */
-    header {
-      flex-shrink: 0;
-      background: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    /* Sticky Unified App Header */
+    header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 15, 25, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      padding: 0.75rem 1.25rem;
+      padding: 0.65rem 1.5rem;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
     }
 
-    .brand {
+    .brand-section {
       display: flex;
       align-items: center;
       gap: 0.85rem;
     }
 
-    .brand-logo {
-      width: 38px;
-      height: 38px;
+    .brand-emblem {
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius-md);
-      background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
+      background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -637,50 +637,44 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
     }
 
-    .brand-title {
+    .brand-meta {
       display: flex;
       flex-direction: column;
     }
 
-    .brand-title h1 {
-      font-size: 1.15rem;
+    .brand-title {
+      font-size: 1.1rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
 
-    .brand-title span.tag-pro {
+    .brand-badge {
       font-size: 0.65rem;
       font-weight: 700;
       text-transform: uppercase;
-      padding: 0.15rem 0.45rem;
+      padding: 0.12rem 0.45rem;
       border-radius: 9999px;
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.3);
       color: var(--cyan);
-      letter-spacing: 0.05em;
-    }
-
-    .brand-title p {
-      font-size: 0.73rem;
-      color: var(--muted);
-      font-weight: 500;
+      letter-spacing: 0.04em;
     }
 
     .badge-status {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
       background: rgba(16, 185, 129, 0.12);
       border: 1px solid rgba(16, 185, 129, 0.3);
       color: var(--green);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      padding: 0.25rem 0.65rem;
+      padding: 0.2rem 0.55rem;
       border-radius: 9999px;
       transition: all 0.25s ease;
       letter-spacing: 0.03em;
@@ -689,7 +683,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     .badge-status.running {
       background: rgba(245, 158, 11, 0.15);
       border-color: rgba(245, 158, 11, 0.4);
-      color: var(--orange);
+      color: var(--amber);
     }
 
     .badge-pulse {
@@ -707,85 +701,11 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       100% { opacity: 1; transform: scale(1); }
     }
 
-    /* Stats Ribbon (Hero KPI Strip) */
-    .stats-ribbon {
-      flex-shrink: 0;
-      background: #0d121e;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.75rem;
-      padding: 0.65rem 1.25rem;
-    }
-
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 0.45rem 0.85rem;
-      transition: border-color 0.15s ease;
-    }
-
-    .stat-item:hover {
-      border-color: var(--border-card);
-    }
-
-    .stat-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--radius-sm);
-      background: var(--bg-surface-elevated);
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .stat-content {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .stat-val {
-      color: #fff;
-      font-family: 'Fira Code', monospace;
-      font-weight: 600;
-      font-size: 0.82rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Action & Tab Toolbar */
-    .action-toolbar {
-      flex-shrink: 0;
-      background-color: #0b0f19;
-      border-bottom: 1px solid var(--border);
-      padding: 0.55rem 1.25rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-    }
-
+    /* Navigation Segmented Tabs */
     .tabs-group {
       display: flex;
-      gap: 0.35rem;
-      background: var(--bg-surface);
+      gap: 0.3rem;
+      background: rgba(15, 21, 35, 0.7);
       padding: 0.25rem;
       border-radius: var(--radius-md);
       border: 1px solid var(--border);
@@ -795,38 +715,38 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       background: transparent;
       border: none;
       color: var(--text-secondary);
-      padding: 0.4rem 0.85rem;
-      font-size: 0.8rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
       font-weight: 600;
       border-radius: var(--radius-sm);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
       transition: all 0.15s ease;
     }
 
     .tab-btn:hover {
       color: #fff;
-      background: var(--bg-surface-hover);
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .tab-btn.active {
       background: var(--cyan);
-      color: #090d16;
+      color: #080b12;
       font-weight: 700;
-      box-shadow: 0 2px 8px var(--cyan-glow);
+      box-shadow: 0 2px 10px var(--cyan-glow);
     }
 
     .tab-btn.active .tab-counter {
-      background: rgba(9, 13, 22, 0.25);
-      color: #090d16;
+      background: rgba(8, 11, 18, 0.25);
+      color: #080b12;
     }
 
     .tab-counter {
-      background: var(--bg-surface-elevated);
+      background: var(--bg-card);
       color: var(--text-secondary);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-family: 'Fira Code', monospace;
       padding: 0.1rem 0.45rem;
       border-radius: 9999px;
@@ -834,14 +754,13 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       transition: all 0.15s ease;
     }
 
-    .actions-right {
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.65rem;
     }
 
-    /* Buttons */
-    .btn-diagnostic {
+    .btn-header {
       background: var(--bg-surface);
       border: 1px solid var(--border);
       color: var(--text-secondary);
@@ -856,14 +775,10 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       transition: all 0.15s ease;
     }
 
-    .btn-diagnostic:hover {
+    .btn-header:hover {
       border-color: var(--border-card);
       color: #fff;
-      background: var(--bg-surface-hover);
-    }
-
-    .btn-diagnostic:active {
-      transform: scale(0.98);
+      background: var(--bg-card);
     }
 
     /* Split Trigger Button */
@@ -887,12 +802,12 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       align-items: center;
       gap: 0.45rem;
       transition: all 0.15s ease;
-      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
     }
 
     .btn-main-trigger:hover:not(:disabled) {
       background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-      box-shadow: 0 3px 12px rgba(2, 132, 199, 0.45);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
     }
 
     .btn-main-trigger:disabled {
@@ -922,7 +837,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       position: absolute;
       top: calc(100% + 6px);
       right: 0;
-      background: var(--bg-surface-elevated);
+      background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: var(--radius-sm);
       box-shadow: var(--shadow-lg);
@@ -956,7 +871,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .dropdown-item:hover {
-      background: var(--bg-surface-hover);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
     }
 
@@ -965,131 +880,437 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Tab Content Area */
-    .tab-content-area {
+    /* Main Container */
+    main.app-main {
       flex: 1;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      position: relative;
+      padding: 1.25rem 1.5rem;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
     }
 
+    /* KPI Metrics Banner */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-card);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kpi-details {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Fira Code', monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 0.15rem;
+    }
+
+    /* Tab Content Panes */
     .tab-pane {
       display: none;
-      flex: 1;
-      overflow: hidden;
       flex-direction: column;
-      height: 100%;
+      flex: 1;
     }
 
     .tab-pane.active {
       display: flex;
     }
 
-    /* Sub Toolbar */
-    .sub-bar {
-      flex-shrink: 0;
-      background: #0f1422;
-      border-bottom: 1px solid var(--border);
-      padding: 0.55rem 1.25rem;
+    /* Control Bar */
+    .control-bar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
     }
 
-    .search-box {
+    .control-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-input-wrap {
       position: relative;
       display: flex;
       align-items: center;
-      min-width: 260px;
+      flex: 1;
+      max-width: 380px;
     }
 
-    .search-box .icon {
+    .search-input-wrap .icon {
       position: absolute;
-      left: 0.65rem;
+      left: 0.75rem;
       color: var(--muted);
       pointer-events: none;
     }
 
-    .search-box input {
+    .search-input-wrap input {
       width: 100%;
       background: var(--bg-input);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       color: #fff;
-      padding: 0.4rem 0.65rem 0.4rem 2rem;
-      font-size: 0.8rem;
+      padding: 0.45rem 0.75rem 0.45rem 2.2rem;
+      font-size: 0.82rem;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.15s ease;
     }
 
-    .search-box input:focus {
+    .search-input-wrap input:focus {
       border-color: var(--cyan);
       box-shadow: 0 0 0 2px var(--cyan-glow);
     }
 
-    .btn-sm {
-      background: var(--bg-surface);
+    .filter-chips {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-secondary);
-      padding: 0.35rem 0.75rem;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 600;
-      border-radius: var(--radius-sm);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
       transition: all 0.15s ease;
+      user-select: none;
     }
 
-    .btn-sm:hover {
-      border-color: var(--border-card);
+    .filter-chip:hover {
       color: #fff;
-      background: var(--bg-surface-hover);
+      border-color: var(--border-card);
     }
 
-    /* Table Container */
-    .table-container {
-      flex: 1;
-      overflow: hidden;
+    .filter-chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .control-right {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .view-mode-toggle {
+      display: flex;
+      background: var(--bg-card);
+      padding: 0.2rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .view-toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      padding: 0.3rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.12s ease;
+    }
+
+    .view-toggle-btn.active {
+      background: var(--bg-surface);
+      color: var(--cyan);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Cards Grid View (Media Showcase) */
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.15rem;
+      margin-bottom: 2rem;
+    }
+
+    .game-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.15rem;
       display: flex;
       flex-direction: column;
-      background: var(--bg);
+      gap: 0.85rem;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: var(--shadow-sm);
     }
 
-    .table-scroll-container {
+    .game-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+    }
+
+    .game-card.is-favorite {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.04) 0%, var(--bg-surface) 100%);
+    }
+
+    .card-top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .week-pill {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+      letter-spacing: 0.03em;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.74rem;
+      font-weight: 800;
+      font-family: 'Fira Code', monospace;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+    }
+
+    .score-high {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .score-med {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+
+    .score-low {
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #94a3b8;
+    }
+
+    /* Matchup Showcase */
+    .matchup-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .team-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
       flex: 1;
-      overflow-y: auto;
-      overflow-x: auto;
+      overflow: hidden;
+    }
+
+    .team-item.home {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .team-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.72rem;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .team-name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .versus-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.25);
+      flex-shrink: 0;
+    }
+
+    /* Release Specs & Metadata */
+    .card-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .meta-tag {
+      font-size: 0.68rem;
+      font-family: 'Fira Code', monospace;
+      font-weight: 600;
+      padding: 0.12rem 0.5rem;
+      border-radius: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .meta-tag.res-1080p {
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    .meta-tag.res-720p {
+      border-color: rgba(99, 102, 241, 0.35);
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .meta-tag.network {
+      border-color: rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: auto;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .added-date {
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'Fira Code', monospace;
+    }
+
+    .card-action-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Compact Table View */
+    .table-view-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 2rem;
     }
 
     table.data-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
     }
 
     table.data-table th {
-      background: #111827;
+      background: var(--bg-card);
       color: var(--text-secondary);
       font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      padding: 0.65rem 1rem;
+      padding: 0.75rem 1.25rem;
       border-bottom: 1px solid var(--border-card);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      white-space: nowrap;
     }
 
     table.data-table td {
-      padding: 0.7rem 1rem;
+      padding: 0.85rem 1.25rem;
       border-bottom: 1px solid var(--border);
       color: var(--text);
       vertical-align: middle;
@@ -1100,137 +1321,33 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       background-color: rgba(255, 255, 255, 0.025);
     }
 
-    /* Badges & Tags */
-    .tag-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 9999px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      font-family: 'Fira Code', monospace;
-      white-space: nowrap;
-    }
-
-    .tag-high {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
-    }
-
-    .tag-med {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #38bdf8;
-    }
-
-    .tag-low {
-      background: rgba(148, 163, 184, 0.12);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      color: #94a3b8;
-    }
-
-    .tag-fav {
-      background: rgba(245, 158, 11, 0.18);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      color: #fbbf24;
-      font-weight: 800;
-    }
-
-    .tag-week {
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.35);
-      color: #c084fc;
-    }
-
-    .tag-status-success {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
-    }
-
-    .tag-status-error {
-      background: rgba(244, 63, 94, 0.15);
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      color: #fb7185;
-    }
-
-    .tag-status-notorrents {
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      color: #7dd3fc;
-    }
-
-    .tag-status-running {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fcd34d;
-    }
-
-    .badge-success {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: rgba(16, 185, 129, 0.12);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      color: #34d399;
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-    }
-
-    /* Matchup Visual Elements */
-    .match-card-title {
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.2rem;
-    }
-
-    .match-meta-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      align-items: center;
-    }
-
-    .meta-pill {
-      font-size: 0.68rem;
-      padding: 0.08rem 0.45rem;
-      border-radius: 4px;
-      background: var(--bg-surface-elevated);
-      color: var(--muted);
+    /* Buttons */
+    .btn-action {
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      font-family: 'Fira Code', monospace;
-    }
-
-    /* Action Buttons in Tables */
-    .btn-reset {
-      background: rgba(244, 63, 94, 0.12);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      color: #fb7185;
-      padding: 0.3rem 0.65rem;
-      font-size: 0.72rem;
+      color: var(--text-secondary);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.74rem;
       font-weight: 600;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: all 0.15s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: all 0.15s ease;
     }
 
-    .btn-reset:hover {
-      background: rgba(244, 63, 94, 0.25);
-      border-color: #fb7185;
+    .btn-action:hover {
+      border-color: var(--border-card);
       color: #fff;
+      background: var(--bg-card-hover);
     }
 
-    .btn-grab {
-      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+    .btn-forget {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fb7185;
       padding: 0.35rem 0.75rem;
       font-size: 0.74rem;
       font-weight: 600;
@@ -1242,9 +1359,31 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       transition: all 0.15s ease;
     }
 
+    .btn-forget:hover {
+      background: rgba(244, 63, 94, 0.25);
+      border-color: #fb7185;
+      color: #fff;
+    }
+
+    .btn-grab {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.4rem 0.85rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+
     .btn-grab:hover:not(:disabled) {
       background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-      box-shadow: 0 2px 8px var(--cyan-glow);
+      box-shadow: 0 4px 12px var(--cyan-glow);
     }
 
     .btn-grab:disabled {
@@ -1252,151 +1391,149 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       cursor: not-allowed;
     }
 
-    .link-action {
-      color: var(--cyan);
-      text-decoration: none;
-      font-size: 0.76rem;
+    .badge-grabbed {
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      transition: color 0.12s ease;
+      gap: 0.35rem;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
     }
 
-    .link-action:hover {
-      color: #7dd3fc;
-      text-decoration: underline;
-    }
-
-    /* Settings Tab */
-    .settings-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-      max-width: 1100px;
+    /* Settings Tab Style */
+    .settings-wrapper {
+      max-width: 1050px;
       margin: 0 auto;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 3rem;
     }
 
-    .settings-section {
+    .settings-panel {
       background: var(--bg-surface);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
       box-shadow: var(--shadow-sm);
     }
 
-    .settings-section-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 1rem;
+    .panel-header {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      padding-bottom: 0.65rem;
+      gap: 0.65rem;
+      padding-bottom: 0.85rem;
       border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
     }
 
-    .settings-section-title .icon {
+    .panel-header h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .panel-header .icon {
       color: var(--cyan);
     }
 
-    .settings-grid {
+    .form-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.15rem;
+      gap: 1.25rem;
     }
 
     @media (max-width: 768px) {
-      .settings-grid {
-        grid-template-columns: 1fr;
-      }
+      .form-grid { grid-template-columns: 1fr; }
     }
 
-    .form-group {
+    .form-field {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
     }
 
-    .form-group label {
-      font-size: 0.76rem;
+    .form-field label {
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-secondary);
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
 
-    .form-group input[type="text"],
-    .form-group input[type="number"],
-    .form-group input[type="password"],
-    .form-group select,
-    .form-group textarea {
+    .form-field input[type="text"],
+    .form-field input[type="number"],
+    .form-field input[type="password"],
+    .form-field select,
+    .form-field textarea {
       background: var(--bg-input);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
       color: #fff;
-      padding: 0.5rem 0.75rem;
-      font-size: 0.82rem;
+      padding: 0.55rem 0.85rem;
+      font-size: 0.84rem;
       outline: none;
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.15s ease;
       font-family: inherit;
     }
 
-    .form-group textarea {
+    .form-field textarea {
       font-family: 'Fira Code', monospace;
       font-size: 0.78rem;
       resize: vertical;
     }
 
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
       border-color: var(--cyan);
       box-shadow: 0 0 0 2px var(--cyan-glow);
     }
 
-    .form-group small {
-      font-size: 0.7rem;
+    .form-field small {
+      font-size: 0.72rem;
       color: var(--muted);
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
-    /* Modern Switch & Checkbox */
-    .form-switch-row {
+    /* Toggle Switch Row */
+    .switch-box {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.6rem 0.85rem;
-      background: var(--bg-surface-elevated);
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      margin-top: 0.35rem;
+      border-radius: var(--radius-md);
     }
 
-    .form-switch-info {
+    .switch-info {
       display: flex;
       flex-direction: column;
-      gap: 0.15rem;
+      gap: 0.2rem;
     }
 
-    .form-switch-info span {
-      font-size: 0.8rem;
+    .switch-info span {
+      font-size: 0.82rem;
       font-weight: 600;
       color: #fff;
     }
 
-    .form-switch-info small {
-      font-size: 0.7rem;
+    .switch-info small {
+      font-size: 0.72rem;
       color: var(--muted);
     }
 
     .switch-label {
       position: relative;
       display: inline-block;
-      width: 42px;
+      width: 44px;
       height: 24px;
       flex-shrink: 0;
       cursor: pointer;
@@ -1412,7 +1549,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       position: absolute;
       cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--border-card);
+      background-color: rgba(255, 255, 255, 0.15);
       transition: .2s;
       border-radius: 24px;
     }
@@ -1434,160 +1571,170 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .switch-label input:checked + .switch-slider:before {
-      transform: translateX(18px);
+      transform: translateX(20px);
     }
 
-    /* Day Chips Selector */
-    .day-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-top: 0.25rem;
-    }
-
-    .day-chip {
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.25rem 0.55rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.12s ease;
-      user-select: none;
-    }
-
-    .day-chip:hover {
-      color: #fff;
-      border-color: var(--border-card);
-    }
-
-    .day-chip.active {
-      background: rgba(56, 189, 248, 0.18);
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .team-presets {
+    /* Day Chips */
+    .day-chips-row {
       display: flex;
       flex-wrap: wrap;
       gap: 0.35rem;
       margin-top: 0.35rem;
     }
 
-    .team-chip {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      background: var(--bg-surface-elevated);
+    .day-toggle-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.3rem 0.65rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .day-toggle-chip:hover {
+      color: #fff;
+      border-color: var(--border-card);
+    }
+
+    .day-toggle-chip.active {
+      background: rgba(56, 189, 248, 0.18);
+      border-color: var(--cyan);
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    /* Team Preset Tags */
+    .team-presets-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.45rem;
+    }
+
+    .team-preset-tag {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-secondary);
       cursor: pointer;
-      transition: all 0.12s ease;
+      transition: all 0.15s ease;
     }
 
-    .team-chip:hover {
+    .team-preset-tag:hover {
       border-color: var(--cyan);
       color: #fff;
     }
 
-    .team-chip.selected {
-      background: rgba(245, 158, 11, 0.18);
-      border-color: var(--orange);
-      color: #fbbf24;
-    }
-
-    .input-with-icon {
+    .input-wrapper {
       position: relative;
       display: flex;
       align-items: center;
     }
 
-    .input-with-icon input {
+    .input-wrapper input {
       width: 100%;
       padding-right: 2.2rem !important;
     }
 
-    .btn-toggle-pwd {
+    .btn-eye {
       position: absolute;
-      right: 0.5rem;
+      right: 0.65rem;
       background: transparent;
       border: none;
       color: var(--muted);
       cursor: pointer;
-      padding: 0.2rem;
       display: flex;
       align-items: center;
-      justify-content: center;
     }
 
-    .btn-toggle-pwd:hover {
-      color: #fff;
+    .btn-eye:hover { color: #fff; }
+
+    /* Sticky Save Toolbar */
+    .save-toolbar {
+      position: sticky;
+      bottom: 1.5rem;
+      z-index: 40;
+      background: rgba(15, 21, 35, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      box-shadow: var(--shadow-lg);
+      margin-top: 1.5rem;
     }
 
-    .btn-save {
+    .btn-save-primary {
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 0.55rem 1.4rem;
-      font-size: 0.82rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.84rem;
       font-weight: 700;
       border-radius: var(--radius-sm);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
       transition: all 0.15s ease;
     }
 
-    .btn-save:hover {
+    .btn-save-primary:hover:not(:disabled) {
       background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.5);
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.6);
     }
 
-    .btn-save:disabled {
+    .btn-save-primary:disabled {
       opacity: 0.65;
       cursor: not-allowed;
     }
 
-    /* Modal Component */
+    /* Modals */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      padding: 1rem;
+      padding: 1.5rem;
     }
 
     .modal-overlay.show {
       display: flex;
     }
 
-    .modal-card {
+    .modal-box {
       background: var(--bg-surface);
       border: 1px solid var(--border-card);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       box-shadow: var(--shadow-lg);
-      max-width: 500px;
+      max-width: 550px;
       width: 100%;
       overflow: hidden;
-      animation: modalScale 0.15s ease-out;
+      animation: modalScale 0.18s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes modalScale {
-      from { opacity: 0; transform: scale(0.95); }
+      from { opacity: 0; transform: scale(0.96); }
       to { opacity: 1; transform: scale(1); }
     }
 
     .modal-header {
-      padding: 1rem 1.25rem;
+      padding: 1.15rem 1.5rem;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -1595,97 +1742,134 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .modal-header h3 {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
     }
 
-    .modal-close {
+    .modal-close-btn {
       background: transparent;
       border: none;
       color: var(--muted);
       cursor: pointer;
-      padding: 0.2rem;
       display: flex;
       align-items: center;
-      justify-content: center;
+      padding: 0.25rem;
     }
 
-    .modal-close:hover {
-      color: #fff;
-    }
+    .modal-close-btn:hover { color: #fff; }
 
     .modal-body {
-      padding: 1.25rem;
-      font-size: 0.82rem;
+      padding: 1.5rem;
+      font-size: 0.86rem;
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     .modal-footer {
-      padding: 0.75rem 1.25rem;
-      background: var(--bg-surface-elevated);
+      padding: 0.85rem 1.5rem;
+      background: var(--bg-card);
       border-top: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 0.65rem;
+      gap: 0.75rem;
     }
 
-    /* Toasts */
-    #toast-container {
-      position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
+    /* Diagnostics Cards inside Modal */
+    .diag-card-list {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.85rem;
+    }
+
+    .diag-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .diag-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .diag-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .diag-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    /* Toast Container */
+    #toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
       z-index: 2000;
       pointer-events: none;
     }
 
     .toast {
-      background: #111827;
+      background: #0f1523;
       border: 1px solid var(--border-card);
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md);
       box-shadow: var(--shadow-lg);
       color: #fff;
-      font-size: 0.8rem;
-      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      padding: 0.85rem 1.15rem;
       display: flex;
       align-items: center;
-      gap: 0.65rem;
-      min-width: 280px;
-      max-width: 420px;
+      gap: 0.75rem;
+      min-width: 300px;
+      max-width: 450px;
       pointer-events: auto;
       animation: toastSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes toastSlide {
-      from { opacity: 0; transform: translateX(40px); }
+      from { opacity: 0; transform: translateX(50px); }
       to { opacity: 1; transform: translateX(0); }
     }
 
     .toast-success { border-left: 4px solid var(--green); }
-    .toast-error { border-left: 4px solid var(--red); }
-    .toast-warning { border-left: 4px solid var(--orange); }
+    .toast-error { border-left: 4px solid var(--rose); }
+    .toast-warning { border-left: 4px solid var(--amber); }
     .toast-info { border-left: 4px solid var(--cyan); }
   </style>
 </head>
 <body>
 
-  <!-- App Header -->
-  <header>
-    <div class="brand">
-      <div class="brand-logo">
+  <!-- Sticky Unified Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-emblem">
         <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       </div>
-      <div class="brand-title">
-        <h1>NFL Grabber <span class="tag-pro">v2.0</span></h1>
-        <p>Automated NFL Game Torrent Grabber &amp; Manager</p>
+      <div class="brand-meta">
+        <div class="brand-title">
+          <span>NFL Grabber</span>
+          <span class="brand-badge">PRO</span>
+        </div>
       </div>
       <div class="badge-status" id="badge-status-wrap">
         <div class="badge-pulse"></div>
@@ -1693,24 +1877,35 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       </div>
     </div>
 
-    <div class="actions-right">
-      <!-- Diagnostics Trigger Buttons -->
-      <button class="btn-diagnostic" id="btn-diag-qbit" title="Test qBittorrent connectivity &amp; auth">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
-        <span>Test qBit</span>
+    <!-- Navigation Tabs -->
+    <nav class="tabs-group">
+      <button class="tab-btn active" data-tab="tab-matches">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Grabbed Matches</span>
+        <span class="tab-counter" id="tab-count-torrents">0</span>
       </button>
-      <button class="btn-diagnostic" id="btn-diag-pier" title="Test 720pier session &amp; thread fetch">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>Test 720pier</span>
+      <button class="tab-btn" data-tab="tab-browser">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>Active Week</span>
+        <span class="tab-counter" id="tab-count-browser">0</span>
       </button>
-      <button class="btn-diagnostic" id="btn-diag-alert" title="Send a test notification alert">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <span>Send Alert</span>
+      <button class="tab-btn" data-tab="tab-settings">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+      <!-- Diagnostics Modal Trigger -->
+      <button class="btn-header" onclick="openDiagModal()" title="Run connectivity diagnostics">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <span>Diagnostics</span>
       </button>
 
       <!-- Execution Split Button -->
       <div class="split-btn">
-        <button class="btn-main-trigger" id="btn-run-now" title="Trigger an immediate live grabber check cycle">
+        <button class="btn-main-trigger" id="btn-run-now" title="Trigger immediate grabber check cycle">
           <span id="run-btn-icon"><svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/></svg></span>
           <span id="run-btn-text">Run Check Now</span>
         </button>
@@ -1731,249 +1926,193 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     </div>
   </header>
 
-  <!-- Hero KPI Stats Ribbon -->
-  <div class="stats-ribbon">
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      </div>
-      <div class="stat-content">
-        <span class="stat-label">Active Week</span>
-        <span class="stat-val" id="stat-active-week">--</span>
-      </div>
-    </div>
+  <!-- App Main Content Area -->
+  <main class="app-main">
 
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    <!-- KPI Metric Summary Tiles -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">Active Week Target</span>
+          <span class="kpi-val" id="stat-active-week">--</span>
+        </div>
       </div>
-      <div class="stat-content">
-        <span class="stat-label">Total Grabbed</span>
-        <span class="stat-val" id="stat-total-torrents">--</span>
-      </div>
-    </div>
 
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="color: var(--green);">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">Grabbed Torrents</span>
+          <span class="kpi-val" id="stat-total-torrents">--</span>
+        </div>
       </div>
-      <div class="stat-content">
-        <span class="stat-label">Next Scheduled Run</span>
-        <span class="stat-val" id="stat-next-run">--</span>
-      </div>
-    </div>
 
-    <div class="stat-item">
-      <div class="stat-icon">
-        <svg class="icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+      <div class="kpi-card">
+        <div class="kpi-icon" style="color: var(--amber);">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">Next Scheduled Run</span>
+          <span class="kpi-val" id="stat-next-run">--</span>
+        </div>
       </div>
-      <div class="stat-content">
-        <span class="stat-label">Last Cycle Check</span>
-        <span class="stat-val" id="stat-last-run">--</span>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="color: var(--purple);">
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+        </div>
+        <div class="kpi-details">
+          <span class="kpi-label">Last Cycle Check</span>
+          <span class="kpi-val" id="stat-last-run">--</span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Persistent Navigation Toolbar -->
-  <div class="action-toolbar">
-    <div class="tabs-group">
-      <button class="tab-btn active" data-tab="tab-matches">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span>Grabbed Matches</span>
-        <span class="tab-counter" id="tab-count-torrents">0</span>
-      </button>
-      <button class="tab-btn" data-tab="tab-browser">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        <span>Active Week Games</span>
-        <span class="tab-counter" id="tab-count-browser">0</span>
-      </button>
-      <button class="tab-btn" data-tab="tab-history">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Run History</span>
-        <span class="tab-counter" id="tab-count-runs">0</span>
-      </button>
-      <button class="tab-btn" data-tab="tab-settings">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>Settings</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Tab Content Area -->
-  <div class="tab-content-area">
+    </section>
 
     <!-- TAB 1: Grabbed Matches -->
-    <div class="tab-pane active" id="tab-matches">
-      <div class="sub-bar">
-        <div class="search-box">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="matches-search" placeholder="Filter matches by team, week, or resolution...">
+    <section class="tab-pane active" id="tab-matches">
+      <div class="control-bar">
+        <div class="control-left">
+          <div class="search-input-wrap">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="matches-search" placeholder="Filter games by team, week, or resolution...">
+          </div>
+          <div class="filter-chips" id="week-filter-chips"></div>
         </div>
-        <div style="font-size: 0.78rem; color: var(--muted);" id="matches-summary">Loading grabbed games...</div>
-        <button class="btn-sm" id="btn-refresh-matches">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          <span>Refresh List</span>
-        </button>
-      </div>
-
-      <div class="table-container">
-        <div class="table-scroll-container">
-          <table class="data-table" id="matches-table">
-            <thead>
-              <tr>
-                <th style="width: 60px;">#</th>
-                <th style="width: 100px;">Week</th>
-                <th style="width: 100px;">Rating</th>
-                <th>Matchup / Release Title</th>
-                <th style="width: 170px;">Grabbed At</th>
-                <th style="width: 120px;">Source</th>
-                <th style="width: 110px; text-align: center;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="matches-tbody">
-              <tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 2rem;">Loading grabbed matches...</td></tr>
-            </tbody>
-          </table>
+        <div class="control-right">
+          <span style="font-size: 0.78rem; color: var(--muted);" id="matches-summary">Loading games...</span>
+          <div class="view-mode-toggle">
+            <button class="view-toggle-btn active" id="btn-view-grid" onclick="setViewMode('grid')" title="Card Grid View">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </button>
+            <button class="view-toggle-btn" id="btn-view-table" onclick="setViewMode('table')" title="Compact Table View">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </button>
+          </div>
+          <button class="btn-action" id="btn-refresh-matches">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span>Refresh</span>
+          </button>
         </div>
       </div>
-    </div>
 
-    <!-- TAB 2: Active Week Match Browser -->
-    <div class="tab-pane" id="tab-browser">
-      <div class="sub-bar">
-        <div class="search-box">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" id="browser-search" placeholder="Search active week games...">
+      <!-- Card Grid View Container -->
+      <div class="matches-grid" id="matches-cards-container"></div>
+
+      <!-- Table View Container -->
+      <div class="table-view-container" id="matches-table-container" style="display: none;">
+        <table class="data-table" id="matches-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th style="width: 100px;">Week</th>
+              <th style="width: 110px;">Rating</th>
+              <th>Matchup / Release Details</th>
+              <th style="width: 170px;">Grabbed At</th>
+              <th style="width: 120px;">Source</th>
+              <th style="width: 110px; text-align: center;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="matches-tbody">
+            <tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 2rem;">Loading grabbed matches...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 2: Active Week Games Browser -->
+    <section class="tab-pane" id="tab-browser">
+      <div class="control-bar">
+        <div class="control-left">
+          <div class="search-input-wrap">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="browser-search" placeholder="Search active week matchups...">
+          </div>
         </div>
-        <div style="font-size: 0.78rem; color: var(--muted);" id="browser-summary">Loading active week games...</div>
-        <button class="btn-sm" id="btn-refresh-browser">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          <span>Refresh from 720pier</span>
-        </button>
-      </div>
-
-      <div class="table-container">
-        <div class="table-scroll-container">
-          <table class="data-table" id="browser-table">
-            <thead>
-              <tr>
-                <th style="width: 60px;">#</th>
-                <th style="width: 100px;">Rating</th>
-                <th>Matchup / Release Title</th>
-                <th style="width: 120px; text-align: center;">Favorite</th>
-                <th style="width: 130px;">Topic Page</th>
-                <th style="width: 170px; text-align: center;">Action</th>
-              </tr>
-            </thead>
-            <tbody id="browser-tbody">
-              <tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 2rem;">Loading games for active week...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: Run History -->
-    <div class="tab-pane" id="tab-history">
-      <div class="sub-bar">
-        <div style="font-size: 0.78rem; color: var(--muted);" id="history-summary">Recent execution cycles recorded in SQLite</div>
-        <button class="btn-sm" id="btn-refresh-history">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-          <span>Refresh History</span>
-        </button>
-      </div>
-
-      <div class="table-container">
-        <div class="table-scroll-container">
-          <table class="data-table" id="history-table">
-            <thead>
-              <tr>
-                <th style="width: 70px;">Run #</th>
-                <th style="width: 130px;">Status</th>
-                <th style="width: 110px;">Week</th>
-                <th style="width: 120px;">Torrents Added</th>
-                <th style="width: 170px;">Started At</th>
-                <th style="width: 170px;">Completed At</th>
-                <th style="width: 100px;">Duration</th>
-                <th>Error Details</th>
-              </tr>
-            </thead>
-            <tbody id="history-tbody">
-              <tr><td colspan="8" style="text-align: center; color: var(--muted); padding: 2rem;">Loading run history...</td></tr>
-            </tbody>
-          </table>
+        <div class="control-right">
+          <span style="font-size: 0.78rem; color: var(--muted);" id="browser-summary">Loading active week games...</span>
+          <button class="btn-action" id="btn-refresh-browser">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span>Refresh from 720pier</span>
+          </button>
         </div>
       </div>
-    </div>
 
-    <!-- TAB 4: Settings Management -->
-    <div class="tab-pane" id="tab-settings">
-      <div class="sub-bar">
-        <div>
-          <span style="font-size: 0.82rem; font-weight: 700; color: #fff;">Application Configuration</span>
-          <span style="font-size: 0.75rem; color: var(--muted); margin-left: 0.5rem;">Saved to disk (.env) and hot-reloaded immediately</span>
-        </div>
-        <button class="btn-sm" id="btn-reload-settings">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-          <span>Reset Form</span>
-        </button>
-      </div>
+      <!-- Browser Cards Grid -->
+      <div class="matches-grid" id="browser-cards-container"></div>
 
-      <div class="settings-container">
+      <!-- Hidden standard table for tests/compatibility -->
+      <table class="data-table" id="browser-table" style="display: none;">
+        <tbody id="browser-tbody"></tbody>
+      </table>
+    </section>
+
+    <!-- TAB 3: Settings Management -->
+    <section class="tab-pane" id="tab-settings">
+      <div class="settings-wrapper">
         <form id="settings-form" onsubmit="event.preventDefault(); saveSettings();">
 
           <!-- Section 1: Match & Grabber Preferences -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              <span>Match &amp; Grabber Preferences</span>
+              <h3>Match &amp; Grabber Preferences</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group" style="grid-column: span 2;">
+            <div class="form-grid">
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Favorite Teams (comma-separated)</label>
                 <input type="text" id="cfg-FAVORITE_TEAMS" placeholder="Kansas City Chiefs, KC, Chiefs">
-                <small>Matches involving these teams are always grabbed even if outside top rated limit</small>
-                <div class="team-presets">
-                  <span style="font-size: 0.7rem; color: var(--muted); align-self: center;">Quick Add:</span>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Kansas City Chiefs')">+ Chiefs</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('San Francisco 49ers')">+ 49ers</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Detroit Lions')">+ Lions</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Baltimore Ravens')">+ Ravens</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Buffalo Bills')">+ Bills</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Philadelphia Eagles')">+ Eagles</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Green Bay Packers')">+ Packers</button>
-                  <button type="button" class="team-chip" onclick="toggleTeamPreset('Dallas Cowboys')">+ Cowboys</button>
+                <small>Matches involving favorite teams are always downloaded, even outside top rating limits</small>
+                <div class="team-presets-row">
+                  <span style="font-size: 0.72rem; color: var(--muted); align-self: center;">Quick Add:</span>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Kansas City Chiefs')">+ Chiefs</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('San Francisco 49ers')">+ 49ers</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Detroit Lions')">+ Lions</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Baltimore Ravens')">+ Ravens</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Buffalo Bills')">+ Bills</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Philadelphia Eagles')">+ Eagles</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Green Bay Packers')">+ Packers</button>
+                  <button type="button" class="team-preset-tag" onclick="toggleTeamPreset('Dallas Cowboys')">+ Cowboys</button>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Top Matches Limit</label>
                 <input type="number" id="cfg-TOP_MATCHES_LIMIT" min="1" max="10" placeholder="1">
-                <small>Number of highest-rated matches to grab per week (1 = top match only)</small>
+                <small>Number of highest-rated matches grabbed each week (1 = top match only)</small>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Quality Preference</label>
                 <select id="cfg-QUALITY_PREFERENCE">
                   <option value="">Any (first available)</option>
                   <option value="1080p">1080p</option>
                   <option value="720p">720p</option>
                 </select>
-                <small>Filter torrents by resolution when multiple releases exist</small>
+                <small>Prioritize resolution when multiple releases are available</small>
               </div>
-              <div class="form-group" style="grid-column: span 2;">
-                <div class="form-switch-row">
-                  <div class="form-switch-info">
-                    <span>Standardize Torrent File Names</span>
-                    <small>Formats downloaded files as "Week 08 - Team A at Team B (2026)" in qBittorrent</small>
+
+              <div class="form-field" style="grid-column: span 2;">
+                <div class="switch-box">
+                  <div class="switch-info">
+                    <span>Standardize Release File Names</span>
+                    <small>Formats downloaded files as "Week 08 - Team A at Team B (2026)" inside qBittorrent</small>
                   </div>
                   <label class="switch-label">
                     <input type="checkbox" id="cfg-RENAME_TORRENT_FILES">
                     <span class="switch-slider"></span>
                   </label>
                 </div>
-                <div class="form-switch-row">
-                  <div class="form-switch-info">
+              </div>
+
+              <div class="form-field" style="grid-column: span 2;">
+                <div class="switch-box">
+                  <div class="switch-info">
                     <span>Auto-start Downloads in qBittorrent</span>
-                    <small>Starts torrent immediately upon queuing instead of adding in paused state</small>
+                    <small>Queues torrent directly in active downloading state rather than paused</small>
                   </div>
                   <label class="switch-label">
                     <input type="checkbox" id="cfg-QBIT_AUTO_START">
@@ -1985,81 +2124,88 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           </div>
 
           <!-- Section 2: Service Schedule & Timing -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span>Service Schedule &amp; Timing</span>
+              <h3>Service Schedule &amp; Timing</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group" style="grid-column: span 2;">
-                <label>Schedule Days</label>
+            <div class="form-grid">
+              <div class="form-field" style="grid-column: span 2;">
+                <label>Schedule Active Days</label>
                 <input type="text" id="cfg-SCHEDULE_DAYS" placeholder="Mon,Tue,Wed,Thu,Fri,Sat,Sun">
-                <div class="day-chips" id="schedule-day-chips">
-                  <span class="day-chip" data-day="Mon" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Mon', this)">Mon</span>
-                  <span class="day-chip" data-day="Tue" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Tue', this)">Tue</span>
-                  <span class="day-chip" data-day="Wed" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Wed', this)">Wed</span>
-                  <span class="day-chip" data-day="Thu" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Thu', this)">Thu</span>
-                  <span class="day-chip" data-day="Fri" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Fri', this)">Fri</span>
-                  <span class="day-chip" data-day="Sat" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Sat', this)">Sat</span>
-                  <span class="day-chip" data-day="Sun" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Sun', this)">Sun</span>
+                <div class="day-chips-row" id="schedule-day-chips">
+                  <span class="day-toggle-chip" data-day="Mon" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Mon', this)">Mon</span>
+                  <span class="day-toggle-chip" data-day="Tue" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Tue', this)">Tue</span>
+                  <span class="day-toggle-chip" data-day="Wed" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Wed', this)">Wed</span>
+                  <span class="day-toggle-chip" data-day="Thu" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Thu', this)">Thu</span>
+                  <span class="day-toggle-chip" data-day="Fri" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Fri', this)">Fri</span>
+                  <span class="day-toggle-chip" data-day="Sat" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Sat', this)">Sat</span>
+                  <span class="day-toggle-chip" data-day="Sun" onclick="toggleDay('cfg-SCHEDULE_DAYS', 'Sun', this)">Sun</span>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Schedule Times (24h or 12h)</label>
                 <input type="text" id="cfg-SCHEDULE_TIMES" placeholder="09:00,15:00,21:00">
-                <small>Specific times of day to trigger grabber checks (comma-separated)</small>
+                <small>Times of day to execute automatic grabber checks (comma-separated)</small>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Top Matches Days</label>
                 <input type="text" id="cfg-TOP_MATCHES_DAYS" placeholder="Mon,Tue,Wed">
-                <div class="day-chips" id="top-day-chips">
-                  <span class="day-chip" data-day="Mon" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Mon', this)">Mon</span>
-                  <span class="day-chip" data-day="Tue" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Tue', this)">Tue</span>
-                  <span class="day-chip" data-day="Wed" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Wed', this)">Wed</span>
-                  <span class="day-chip" data-day="Thu" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Thu', this)">Thu</span>
-                  <span class="day-chip" data-day="Fri" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Fri', this)">Fri</span>
-                  <span class="day-chip" data-day="Sat" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Sat', this)">Sat</span>
-                  <span class="day-chip" data-day="Sun" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Sun', this)">Sun</span>
+                <div class="day-chips-row" id="top-day-chips">
+                  <span class="day-toggle-chip" data-day="Mon" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Mon', this)">Mon</span>
+                  <span class="day-toggle-chip" data-day="Tue" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Tue', this)">Tue</span>
+                  <span class="day-toggle-chip" data-day="Wed" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Wed', this)">Wed</span>
+                  <span class="day-toggle-chip" data-day="Thu" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Thu', this)">Thu</span>
+                  <span class="day-toggle-chip" data-day="Fri" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Fri', this)">Fri</span>
+                  <span class="day-toggle-chip" data-day="Sat" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Sat', this)">Sat</span>
+                  <span class="day-toggle-chip" data-day="Sun" onclick="toggleDay('cfg-TOP_MATCHES_DAYS', 'Sun', this)">Sun</span>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Fallback Interval Hours</label>
+
+              <div class="form-field">
+                <label>Interval Hours (Fallback)</label>
                 <input type="number" id="cfg-CHECK_INTERVAL_HOURS" step="0.5" min="0.5" placeholder="6">
-                <small>Interval between checks when Schedule Times is blank</small>
+                <small>Used only when Schedule Times field is left empty</small>
               </div>
             </div>
           </div>
 
-          <!-- Section 3: 720pier Connection -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <!-- Section 3: 720pier Tracker -->
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span>720pier Tracker Connection</span>
+              <h3>720pier Forum Connection</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group" style="grid-column: span 2;">
+            <div class="form-grid">
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Thread URL</label>
                 <input type="text" id="cfg-PIER_THREAD_URL" placeholder="https://720pier.ru/viewtopic.php?t=76272">
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Username</label>
                 <input type="text" id="cfg-PIER_USERNAME" placeholder="720pier forum username">
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Password</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-PIER_PASSWORD" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-PIER_PASSWORD')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-PIER_PASSWORD')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="form-group" style="grid-column: span 2;">
+
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Session Cookie (PIER_COOKIE)</label>
                 <textarea id="cfg-PIER_COOKIE" rows="2" placeholder="Leave unchanged to keep existing or paste updated browser cookie"></textarea>
-                <small>Used to authenticate if Cloudflare or CAPTCHA challenge is active</small>
+                <small>Session cookie used if CAPTCHA challenge is active on 720pier</small>
               </div>
-              <div class="form-group" style="grid-column: span 2;">
+
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Proxy URL (Optional)</label>
                 <input type="text" id="cfg-PROXY_URL" placeholder="socks5://127.0.0.1:1080 or http://proxy:8080">
               </div>
@@ -2067,47 +2213,53 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           </div>
 
           <!-- Section 4: qBittorrent Configuration -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              <span>qBittorrent Configuration</span>
+              <h3>qBittorrent Configuration</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group">
+            <div class="form-grid">
+              <div class="form-field">
                 <label>Host URL</label>
                 <input type="text" id="cfg-QBIT_HOST" placeholder="http://qbittorrent:8087">
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>API Key (qBittorrent v5.2+)</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-QBIT_API_KEY" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-QBIT_API_KEY')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-QBIT_API_KEY')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Username (Fallback)</label>
                 <input type="text" id="cfg-QBIT_USERNAME" placeholder="admin">
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Password (Fallback)</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-QBIT_PASSWORD" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-QBIT_PASSWORD')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-QBIT_PASSWORD')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Save Path</label>
                 <input type="text" id="cfg-QBIT_SAVE_PATH" placeholder="/nfl">
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Category</label>
                 <input type="text" id="cfg-QBIT_CATEGORY" placeholder="NFL">
               </div>
-              <div class="form-group" style="grid-column: span 2;">
+
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Tags (comma-separated)</label>
                 <input type="text" id="cfg-QBIT_TAGS" placeholder="720pier,thuuz">
               </div>
@@ -2115,31 +2267,33 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           </div>
 
           <!-- Section 5: Notifications -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              <span>Notifications (Discord &amp; Telegram)</span>
+              <h3>Notification Dispatchers</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group" style="grid-column: span 2;">
+            <div class="form-grid">
+              <div class="form-field" style="grid-column: span 2;">
                 <label>Discord Webhook URL</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-DISCORD_WEBHOOK_URL" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-DISCORD_WEBHOOK_URL')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-DISCORD_WEBHOOK_URL')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Telegram Bot Token</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-TELEGRAM_BOT_TOKEN" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-TELEGRAM_BOT_TOKEN')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-TELEGRAM_BOT_TOKEN')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Telegram Chat ID</label>
                 <input type="text" id="cfg-TELEGRAM_CHAT_ID" placeholder="e.g. 123456789">
               </div>
@@ -2147,22 +2301,23 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           </div>
 
           <!-- Section 6: Security -->
-          <div class="settings-section">
-            <div class="settings-section-title">
+          <div class="settings-panel">
+            <div class="panel-header">
               <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span>Dashboard Security (HTTP Basic Auth)</span>
+              <h3>Web Dashboard Security (HTTP Basic Auth)</h3>
             </div>
-            <div class="settings-grid">
-              <div class="form-group">
+            <div class="form-grid">
+              <div class="form-field">
                 <label>Web Dashboard Username</label>
                 <input type="text" id="cfg-WEB_USERNAME" placeholder="Leave blank to disable authentication">
                 <small>Requires browser login prompt when accessing dashboard</small>
               </div>
-              <div class="form-group">
+
+              <div class="form-field">
                 <label>Web Dashboard Password</label>
-                <div class="input-with-icon">
+                <div class="input-wrapper">
                   <input type="password" id="cfg-WEB_PASSWORD" placeholder="Leave unchanged to keep existing">
-                  <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('cfg-WEB_PASSWORD')">
+                  <button type="button" class="btn-eye" onclick="togglePasswordVisibility('cfg-WEB_PASSWORD')">
                     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
@@ -2170,29 +2325,89 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
             </div>
           </div>
 
-          <!-- Save Button Bar -->
-          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 1rem; padding: 0.5rem 0 2.5rem;">
-            <span id="settings-status" style="font-size: 0.8rem; color: var(--green);"></span>
-            <button type="submit" class="btn-save" id="btn-save-settings">
-              <svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              <span>Save &amp; Apply Settings</span>
-            </button>
+          <!-- Sticky Save Bar -->
+          <div class="save-toolbar">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <span id="settings-status" style="font-size: 0.84rem; font-weight: 600; color: var(--green);"></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <button type="button" class="btn-header" id="btn-reload-settings">Reset Changes</button>
+              <button type="submit" class="btn-save-primary" id="btn-save-settings">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>Save &amp; Hot-Reload</span>
+              </button>
+            </div>
           </div>
         </form>
       </div>
-    </div>
+    </section>
 
+  </main>
+
+  <!-- Diagnostics Modal -->
+  <div class="modal-overlay" id="diag-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>
+          <svg class="icon" style="color: var(--cyan);" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span>Subsystem Diagnostics</span>
+        </h3>
+        <button class="modal-close-btn" onclick="closeDiagModal()">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem; font-size: 0.8rem; color: var(--muted);">Test live connectivity and authentication with downstream services:</p>
+        <div class="diag-card-list">
+          <div class="diag-item">
+            <div class="diag-meta">
+              <span class="diag-name">
+                <svg class="icon icon-sm" style="color: var(--cyan);" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>qBittorrent Client</span>
+              </span>
+              <span class="diag-desc">Verifies host URL, API credentials, and Web API version</span>
+            </div>
+            <button class="btn-action" id="btn-diag-qbit">Run Test</button>
+          </div>
+
+          <div class="diag-item">
+            <div class="diag-meta">
+              <span class="diag-name">
+                <svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span>720pier Tracker</span>
+              </span>
+              <span class="diag-desc">Tests forum access, session cookie, and active week parsing</span>
+            </div>
+            <button class="btn-action" id="btn-diag-pier">Run Test</button>
+          </div>
+
+          <div class="diag-item">
+            <div class="diag-meta">
+              <span class="diag-name">
+                <svg class="icon icon-sm" style="color: var(--amber);" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span>Alert Notifications</span>
+              </span>
+              <span class="diag-desc">Dispatches a test notification message to Discord &amp; Telegram</span>
+            </div>
+            <button class="btn-action" id="btn-diag-alert">Send Alert</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action" onclick="closeDiagModal()">Close</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Confirmation Modal -->
+  <!-- Forget Confirmation Modal -->
   <div class="modal-overlay" id="confirm-modal">
-    <div class="modal-card">
+    <div class="modal-box">
       <div class="modal-header">
-        <h3 id="confirm-modal-title">
-          <svg class="icon" style="color: var(--red);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          <span>Forget Match from Memory?</span>
+        <h3>
+          <svg class="icon" style="color: var(--rose);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          <span>Forget Match from History?</span>
         </h3>
-        <button class="modal-close" onclick="closeConfirmModal()">
+        <button class="modal-close-btn" onclick="closeConfirmModal()">
           <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
@@ -2200,19 +2415,70 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         Are you sure you want to forget this match?
       </div>
       <div class="modal-footer">
-        <button class="btn-sm" onclick="closeConfirmModal()">Cancel</button>
-        <button class="btn-reset" id="confirm-modal-btn">Forget Match</button>
+        <button class="btn-action" onclick="closeConfirmModal()">Cancel</button>
+        <button class="btn-forget" id="confirm-modal-btn">Forget Record</button>
       </div>
     </div>
   </div>
 
-  <!-- Toast Alerts Container -->
+  <!-- Toast Container -->
   <div id="toast-container"></div>
 
   <script>
-    // State variables
+    // NFL Team Directory with official branding colors & abbreviations
+    const NFL_TEAMS = {
+      'cardinals': { code: 'ARI', name: 'Arizona Cardinals', color: '#97233F' },
+      'falcons': { code: 'ATL', name: 'Atlanta Falcons', color: '#A71930' },
+      'ravens': { code: 'BAL', name: 'Baltimore Ravens', color: '#241773' },
+      'bills': { code: 'BUF', name: 'Buffalo Bills', color: '#00338D' },
+      'panthers': { code: 'CAR', name: 'Carolina Panthers', color: '#0085CA' },
+      'bears': { code: 'CHI', name: 'Chicago Bears', color: '#0B162A' },
+      'bengals': { code: 'CIN', name: 'Cincinnati Bengals', color: '#FB4F14' },
+      'browns': { code: 'CLE', name: 'Cleveland Browns', color: '#311D00' },
+      'cowboys': { code: 'DAL', name: 'Dallas Cowboys', color: '#003594' },
+      'broncos': { code: 'DEN', name: 'Denver Broncos', color: '#FB4F14' },
+      'lions': { code: 'DET', name: 'Detroit Lions', color: '#0076B6' },
+      'packers': { code: 'GB', name: 'Green Bay Packers', color: '#203731' },
+      'texans': { code: 'HOU', name: 'Houston Texans', color: '#03202F' },
+      'colts': { code: 'IND', name: 'Indianapolis Colts', color: '#002C5F' },
+      'jaguars': { code: 'JAX', name: 'Jacksonville Jaguars', color: '#006778' },
+      'chiefs': { code: 'KC', name: 'Kansas City Chiefs', color: '#E31837' },
+      'raiders': { code: 'LV', name: 'Las Vegas Raiders', color: '#000000' },
+      'chargers': { code: 'LAC', name: 'Los Angeles Chargers', color: '#0080C6' },
+      'rams': { code: 'LAR', name: 'Los Angeles Rams', color: '#003594' },
+      'dolphins': { code: 'MIA', name: 'Miami Dolphins', color: '#008E97' },
+      'vikings': { code: 'MIN', name: 'Minnesota Vikings', color: '#4F2683' },
+      'patriots': { code: 'NE', name: 'New England Patriots', color: '#002244' },
+      'saints': { code: 'NO', name: 'New Orleans Saints', color: '#D3BC8D' },
+      'giants': { code: 'NYG', name: 'New York Giants', color: '#0B2265' },
+      'jets': { code: 'NYJ', name: 'New York Jets', color: '#125740' },
+      'eagles': { code: 'PHI', name: 'Philadelphia Eagles', color: '#004C54' },
+      'steelers': { code: 'PIT', name: 'Pittsburgh Steelers', color: '#FFB612' },
+      '49ers': { code: 'SF', name: 'San Francisco 49ers', color: '#AA0000' },
+      'seahawks': { code: 'SEA', name: 'Seattle Seahawks', color: '#002244' },
+      'buccaneers': { code: 'TB', name: 'Tampa Bay Buccaneers', color: '#D50A0A' },
+      'titans': { code: 'TEN', name: 'Tennessee Titans', color: '#0C2340' },
+      'commanders': { code: 'WAS', name: 'Washington Commanders', color: '#5A1414' },
+    };
+
+    function resolveTeam(str) {
+      if (!str) return { code: 'NFL', name: 'NFL Team', color: '#1e293b' };
+      const s = str.toLowerCase();
+      for (const [key, t] of Object.entries(NFL_TEAMS)) {
+        if (s.includes(key) || s.includes(t.code.toLowerCase()) || s.includes(t.name.toLowerCase())) {
+          return t;
+        }
+      }
+      const words = str.trim().split(/\s+/);
+      const code = words.length > 1 ? (words[0][0] + words[1][0]).toUpperCase() : str.substring(0, 3).toUpperCase();
+      return { code, name: str.trim(), color: '#1e293b' };
+    }
+
+    // State
     let matchesData = [];
     let browserData = [];
+    let activeWeekFilter = 'all';
+    let currentViewMode = 'grid'; // 'grid' | 'table'
     let previousCycleRunning = false;
     let pendingConfirmAction = null;
 
@@ -2234,9 +2500,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       if (type === 'success') {
         iconSvg = '<svg class="icon icon-sm" style="color: var(--green);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
       } else if (type === 'error') {
-        iconSvg = '<svg class="icon icon-sm" style="color: var(--red);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
+        iconSvg = '<svg class="icon icon-sm" style="color: var(--rose);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
       } else if (type === 'warning') {
-        iconSvg = '<svg class="icon icon-sm" style="color: var(--orange);" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+        iconSvg = '<svg class="icon icon-sm" style="color: var(--amber);" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
       } else {
         iconSvg = '<svg class="icon icon-sm" style="color: var(--cyan);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
       }
@@ -2244,14 +2510,17 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       toastContainer.appendChild(toast);
       setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transform = 'translateX(100%)';
+        toast.style.transform = 'translateX(50px)';
         toast.style.transition = 'all 0.3s ease-out';
         setTimeout(() => toast.remove(), 300);
       }, duration);
     }
 
     // Modal Helpers
-    function openConfirmModal(title, message, onConfirm) {
+    function openDiagModal() { document.getElementById('diag-modal').classList.add('show'); }
+    function closeDiagModal() { document.getElementById('diag-modal').classList.remove('show'); }
+
+    function openConfirmModal(message, onConfirm) {
       document.getElementById('confirm-modal-body').textContent = message;
       pendingConfirmAction = onConfirm;
       document.getElementById('confirm-modal').classList.add('show');
@@ -2267,7 +2536,28 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       closeConfirmModal();
     });
 
-    // Tab Switching
+    // View Mode Toggle (Grid vs Table)
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      const gridBtn = document.getElementById('btn-view-grid');
+      const tableBtn = document.getElementById('btn-view-table');
+      const gridContainer = document.getElementById('matches-cards-container');
+      const tableContainer = document.getElementById('matches-table-container');
+
+      if (mode === 'grid') {
+        gridBtn.classList.add('active');
+        tableBtn.classList.remove('active');
+        gridContainer.style.display = 'grid';
+        tableContainer.style.display = 'none';
+      } else {
+        tableBtn.classList.add('active');
+        gridBtn.classList.remove('active');
+        gridContainer.style.display = 'none';
+        tableContainer.style.display = 'block';
+      }
+    }
+
+    // Tab Navigation
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -2280,7 +2570,6 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
         if (targetId === 'tab-matches') fetchMatches();
         if (targetId === 'tab-browser') fetchBrowserMatches();
-        if (targetId === 'tab-history') fetchHistory();
         if (targetId === 'tab-settings') loadSettings();
       });
     });
@@ -2290,23 +2579,19 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
       if (e.key === '1') document.querySelector('.tab-btn[data-tab="tab-matches"]')?.click();
       if (e.key === '2') document.querySelector('.tab-btn[data-tab="tab-browser"]')?.click();
-      if (e.key === '3') document.querySelector('.tab-btn[data-tab="tab-history"]')?.click();
-      if (e.key === '4') document.querySelector('.tab-btn[data-tab="tab-settings"]')?.click();
-      if (e.key === 'r') {
-        fetchStatus();
-        fetchMatches();
-        fetchBrowserMatches();
-        fetchHistory();
-      }
+      if (e.key === '3') document.querySelector('.tab-btn[data-tab="tab-settings"]')?.click();
+      if (e.key === 'g') setViewMode(currentViewMode === 'grid' ? 'table' : 'grid');
+      if (e.key === 'r') { fetchStatus(); fetchMatches(); fetchBrowserMatches(); }
       if (e.key === '/') {
         e.preventDefault();
         const activeTab = document.querySelector('.tab-pane.active')?.id;
         if (activeTab === 'tab-matches') document.getElementById('matches-search')?.focus();
         if (activeTab === 'tab-browser') document.getElementById('browser-search')?.focus();
       }
+      if (e.key === 'Escape') { closeDiagModal(); closeConfirmModal(); }
     });
 
-    // Execution Dropdown & Triggers
+    // Run Trigger Actions
     runCaret.addEventListener('click', (e) => {
       e.stopPropagation();
       runDropdown.classList.toggle('show');
@@ -2319,25 +2604,24 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     async function triggerCycle(dryRun = false) {
       runDropdown.classList.remove('show');
       runBtn.disabled = true;
-      document.getElementById('run-btn-text').textContent = dryRun ? 'Starting Dry Run...' : 'Starting Cycle...';
+      document.getElementById('run-btn-text').textContent = dryRun ? 'Starting Dry Run...' : 'Running Cycle...';
 
       try {
         const res = await fetch(`/api/trigger?dry_run=${dryRun ? '1' : '0'}`, { method: 'POST' });
         const data = await res.json();
         if (res.status === 202) {
-          showToast(data.message || 'Cycle successfully started in background!', 'success');
+          showToast(data.message || 'Grabber cycle started successfully!', 'success');
         } else if (res.status === 409) {
           showToast(data.error || 'A grabber cycle is already in progress.', 'warning');
         } else {
           showToast(data.error || 'Failed to trigger cycle.', 'error');
         }
       } catch (err) {
-        showToast('Network error triggering grabber cycle: ' + err.message, 'error');
+        showToast('Network error triggering cycle: ' + err.message, 'error');
       } finally {
         setTimeout(() => {
           fetchStatus();
           fetchMatches();
-          fetchHistory();
         }, 600);
       }
     }
@@ -2346,117 +2630,154 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     document.getElementById('btn-opt-live').addEventListener('click', () => triggerCycle(false));
     document.getElementById('btn-opt-dryrun').addEventListener('click', () => triggerCycle(true));
 
-    // Diagnostics
+    // Diagnostics Handlers
     document.getElementById('btn-diag-qbit').addEventListener('click', async () => {
       const btn = document.getElementById('btn-diag-qbit');
       btn.disabled = true;
-      btn.innerHTML = '<span>Testing...</span>';
+      btn.textContent = 'Testing...';
       try {
         const res = await fetch('/api/test/qbit', { method: 'POST' });
         const data = await res.json();
         if (data.ok) {
           showToast(`qBittorrent Connected! Version: ${data.version} (API: ${data.web_api_version})`, 'success', 5000);
         } else {
-          showToast(`qBittorrent Test Failed: ${data.error}`, 'error', 6000);
+          showToast(`qBit Test Failed: ${data.error}`, 'error', 6000);
         }
       } catch (e) {
-        showToast('qBittorrent connection request failed: ' + e.message, 'error');
+        showToast('qBit connection error: ' + e.message, 'error');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg><span>Test qBit</span>';
+        btn.textContent = 'Run Test';
       }
     });
 
     document.getElementById('btn-diag-pier').addEventListener('click', async () => {
       const btn = document.getElementById('btn-diag-pier');
       btn.disabled = true;
-      btn.innerHTML = '<span>Testing...</span>';
+      btn.textContent = 'Testing...';
       try {
         const res = await fetch('/api/test/pier', { method: 'POST' });
         const data = await res.json();
         if (data.ok) {
-          showToast(`720pier Session Active! Detected: ${data.detected_week}`, 'success', 5000);
+          showToast(`720pier Session Active! Active Week: ${data.detected_week}`, 'success', 5000);
         } else {
-          showToast(`720pier Session Error: ${data.error}`, 'error', 6000);
+          showToast(`720pier Test Failed: ${data.error}`, 'error', 6000);
         }
       } catch (e) {
-        showToast('720pier test request failed: ' + e.message, 'error');
+        showToast('720pier test error: ' + e.message, 'error');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Test 720pier</span>';
+        btn.textContent = 'Run Test';
       }
     });
 
     document.getElementById('btn-diag-alert').addEventListener('click', async () => {
       const btn = document.getElementById('btn-diag-alert');
       btn.disabled = true;
-      btn.innerHTML = '<span>Sending...</span>';
+      btn.textContent = 'Sending...';
       try {
         const res = await fetch('/api/test/alert', { method: 'POST' });
         const data = await res.json();
         if (data.ok) {
           const discord = data.results.discord === true ? 'Discord: Sent' : data.results.discord;
           const telegram = data.results.telegram === true ? 'Telegram: Sent' : data.results.telegram;
-          showToast(`Test Alert Dispatched! (${discord}, ${telegram})`, 'success', 5000);
+          showToast(`Test Dispatched! (${discord}, ${telegram})`, 'success', 5000);
         } else {
           showToast(`Alert Test Failed: ${data.error}`, 'error', 6000);
         }
       } catch (e) {
-        showToast('Alert test request failed: ' + e.message, 'error');
+        showToast('Alert test error: ' + e.message, 'error');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span>Send Alert</span>';
+        btn.textContent = 'Send Alert';
       }
     });
 
-    // Helper to parse title details
-    function parseReleaseTitle(rawTitle) {
-      if (!rawTitle) return { matchup: 'Unknown Matchup', resolution: '', format: '', network: '' };
-      let matchup = rawTitle;
-      let resolution = '';
-      let format = '';
-      let network = '';
+    // Helper: Parse match title details
+    function parseGameRelease(rawTitle) {
+      if (!rawTitle) return { awayStr: '', homeStr: '', resolution: '', fps: '', network: '', format: 'MKV', date: '' };
+      let clean = rawTitle;
+      let date = '';
+      let awayStr = '';
+      let homeStr = '';
 
-      // Matchup extracted from standard NFL / Week / Date / Matchup [extra]
       const parts = rawTitle.split('/');
       if (parts.length >= 4) {
-        const potential = parts[3].trim();
-        const bracketIdx = potential.indexOf('[');
-        if (bracketIdx !== -1) {
-          matchup = potential.substring(0, bracketIdx).trim();
+        date = parts[2].trim();
+        const matchupPart = parts[3].split('[')[0].trim();
+        const splitBy = matchupPart.includes('@') ? '@' : (matchupPart.includes(' vs ') ? ' vs ' : (matchupPart.includes(' at ') ? ' at ' : null));
+        if (splitBy) {
+          const sides = matchupPart.split(splitBy);
+          awayStr = sides[0].trim();
+          homeStr = sides[1].trim();
         } else {
-          matchup = potential;
+          awayStr = matchupPart;
+        }
+      } else {
+        const splitBy = clean.includes('@') ? '@' : (clean.includes(' vs ') ? ' vs ' : (clean.includes(' at ') ? ' at ' : null));
+        if (splitBy) {
+          const sides = clean.split(splitBy);
+          awayStr = sides[0].trim();
+          homeStr = sides[1].trim();
+        } else {
+          awayStr = clean;
         }
       }
 
+      let resolution = '';
       if (/1080p/i.test(rawTitle)) resolution = '1080p';
       else if (/720p/i.test(rawTitle)) resolution = '720p';
 
-      if (/60fps/i.test(rawTitle)) format = '60fps';
+      let fps = /60fps/i.test(rawTitle) ? '60 FPS' : '';
 
-      const netMatch = rawTitle.match(/EN\/(FOX|CBS|ESPN|NBC|ABC|AMZN|NFLN|PEACOCK)/i);
-      if (netMatch) network = netMatch[1].toUpperCase();
+      let network = '';
+      const net = rawTitle.match(/EN\/(FOX|CBS|ESPN|NBC|ABC|AMZN|NFLN|PEACOCK)/i);
+      if (net) network = net[1].toUpperCase();
 
-      return { matchup, resolution, format, network };
+      return { awayStr, homeStr, resolution, fps, network, format: 'MKV', date };
     }
 
     // Grabbed Matches Management
     async function fetchMatches() {
-      const tbody = document.getElementById('matches-tbody');
       try {
         const res = await fetch('/api/torrents');
         const data = await res.json();
         matchesData = data.torrents || [];
+        updateWeekFilterChips();
         renderMatches();
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--red); padding: 2rem;">Error loading matches: ${escapeHtml(err.message)}</td></tr>`;
+        document.getElementById('matches-summary').textContent = 'Error loading matches: ' + err.message;
       }
     }
 
+    function updateWeekFilterChips() {
+      const container = document.getElementById('week-filter-chips');
+      const weeks = [...new Set(matchesData.map(m => m.week).filter(Boolean))];
+      if (weeks.length <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      let html = `<button class="filter-chip ${activeWeekFilter === 'all' ? 'active' : ''}" onclick="filterByWeek('all')">All Weeks</button>`;
+      weeks.forEach(w => {
+        html += `<button class="filter-chip ${activeWeekFilter === w ? 'active' : ''}" onclick="filterByWeek('${escapeHtml(w)}')">${escapeHtml(w)}</button>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function filterByWeek(w) {
+      activeWeekFilter = w;
+      updateWeekFilterChips();
+      renderMatches();
+    }
+
     function renderMatches() {
+      const cardsContainer = document.getElementById('matches-cards-container');
       const tbody = document.getElementById('matches-tbody');
       const query = (document.getElementById('matches-search').value || '').toLowerCase().trim();
+
       const filtered = matchesData.filter(m => {
+        if (activeWeekFilter !== 'all' && m.week !== activeWeekFilter) return false;
         const text = `${m.title} ${m.week} ${m.rating || ''}`.toLowerCase();
         return !query || text.includes(query);
       });
@@ -2465,57 +2786,102 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       document.getElementById('tab-count-torrents').textContent = matchesData.length;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 3rem 1rem;">
-          <svg class="icon icon-lg" style="margin-bottom: 0.5rem; opacity: 0.4;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div>No grabbed matches match your search criteria.</div>
-        </td></tr>`;
+        const emptyHtml = `<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 4rem 1rem;">
+          <svg class="icon icon-lg" style="margin-bottom: 0.65rem; opacity: 0.35;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div style="font-weight: 600; font-size: 0.95rem; color: #fff;">No Grabbed Matches Found</div>
+          <p style="font-size: 0.78rem; margin-top: 0.25rem;">Adjust search filters or trigger a live grabber check.</p>
+        </div>`;
+        cardsContainer.innerHTML = emptyHtml;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 3rem;">No grabbed matches match your search criteria.</td></tr>`;
         return;
       }
 
-      tbody.innerHTML = filtered.map((m) => {
+      // Render Cards View
+      cardsContainer.innerHTML = filtered.map(m => {
+        const parsed = parseGameRelease(m.title);
+        const awayTeam = resolveTeam(parsed.awayStr);
+        const homeTeam = resolveTeam(parsed.homeStr);
+
         const ratingVal = parseInt(m.rating, 10);
-        let tagClass = 'tag-high';
-        if (isNaN(ratingVal)) tagClass = 'tag-med';
-        else if (ratingVal < 90) tagClass = 'tag-med';
+        let scoreClass = 'score-high';
+        if (isNaN(ratingVal)) scoreClass = 'score-med';
+        else if (ratingVal < 90) scoreClass = 'score-med';
 
         const isFav = (m.title || '').includes('Chiefs') || (m.title || '').includes('KC');
-        const favBadge = isFav
-          ? '<span class="tag-badge tag-fav" style="margin-left: 4px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/></svg> KC</span>' : '';
+        const favBadge = isFav ? `<span class="score-badge" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24;">⭐ KC Chiefs</span>` : '';
 
-        const ratingBadge = m.rating
-          ? `<span class="tag-badge ${tagClass}">${escapeHtml(m.rating)} pts</span>${favBadge}`
-          : '<span class="tag-badge tag-med">N/A</span>';
+        const scorePill = m.rating
+          ? `<span class="score-badge ${scoreClass}"><svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/></svg> ${escapeHtml(m.rating)} pts</span>`
+          : `<span class="score-badge score-low">N/A</span>`;
 
-        const parsed = parseReleaseTitle(m.title);
+        let metaHtml = '';
+        if (parsed.resolution) metaHtml += `<span class="meta-tag res-${parsed.resolution}">${escapeHtml(parsed.resolution)}</span>`;
+        if (parsed.fps) metaHtml += `<span class="meta-tag">${escapeHtml(parsed.fps)}</span>`;
+        if (parsed.network) metaHtml += `<span class="meta-tag network">${escapeHtml(parsed.network)}</span>`;
+        if (parsed.format) metaHtml += `<span class="meta-tag">${escapeHtml(parsed.format)}</span>`;
 
-        let pillsHtml = '';
-        if (parsed.resolution) pillsHtml += `<span class="meta-pill">${escapeHtml(parsed.resolution)}</span>`;
-        if (parsed.format) pillsHtml += `<span class="meta-pill">${escapeHtml(parsed.format)}</span>`;
-        if (parsed.network) pillsHtml += `<span class="meta-pill">${escapeHtml(parsed.network)}</span>`;
+        const dateStr = m.added_at ? m.added_at.replace('T', ' ').substring(0, 16) : '--';
+
+        return `<div class="game-card ${isFav ? 'is-favorite' : ''}">
+          <div class="card-top-bar">
+            <span class="week-pill">${escapeHtml(m.week)}</span>
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              ${favBadge}
+              ${scorePill}
+            </div>
+          </div>
+
+          <div class="matchup-box">
+            <div class="team-item">
+              <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
+              <span class="team-name" title="${escapeHtml(awayTeam.name)}">${escapeHtml(awayTeam.name)}</span>
+            </div>
+            <span class="versus-badge">@</span>
+            <div class="team-item home">
+              <span class="team-name" title="${escapeHtml(homeTeam.name)}">${escapeHtml(homeTeam.name)}</span>
+              <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
+            </div>
+          </div>
+
+          <div class="card-meta-row">${metaHtml}</div>
+
+          <div class="card-footer">
+            <span class="added-date">Added ${dateStr}</span>
+            <div class="card-action-group">
+              <a href="${escapeHtml(m.torrent_url)}" target="_blank" class="btn-action">
+                <span>Torrent</span>
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+              <button class="btn-forget" onclick="confirmResetTorrent(${m.id}, '${escapeHtml(awayTeam.name)} @ ${escapeHtml(homeTeam.name)}')">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Forget</span>
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Render Table View
+      tbody.innerHTML = filtered.map(m => {
+        const ratingVal = parseInt(m.rating, 10);
+        let scoreClass = 'score-high';
+        if (isNaN(ratingVal)) scoreClass = 'score-med';
+        else if (ratingVal < 90) scoreClass = 'score-med';
 
         return `<tr>
           <td style="color: var(--muted); font-family: 'Fira Code', monospace; font-size: 0.75rem;">#${m.id}</td>
-          <td><span class="tag-badge tag-week">${escapeHtml(m.week)}</span></td>
-          <td>${ratingBadge}</td>
+          <td><span class="week-pill">${escapeHtml(m.week)}</span></td>
+          <td><span class="score-badge ${scoreClass}">${escapeHtml(m.rating || 'N/A')} pts</span></td>
+          <td><strong style="color: #fff;">${escapeHtml(m.title)}</strong></td>
+          <td style="color: var(--muted); font-size: 0.75rem; font-family: 'Fira Code', monospace;">${escapeHtml(m.added_at ? m.added_at.replace('T', ' ').substring(0, 16) : '--')}</td>
           <td>
-            <div class="match-card-title">${escapeHtml(parsed.matchup)}</div>
-            <div class="match-meta-pills" style="margin-top: 0.25rem;">
-              ${pillsHtml}
-              <span style="font-size: 0.7rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; max-width: 450px; white-space: nowrap;">${escapeHtml(m.title)}</span>
-            </div>
-          </td>
-          <td style="color: var(--muted); font-size: 0.75rem; font-family: 'Fira Code', monospace;">${escapeHtml(m.added_at ? m.added_at.replace('T', ' ').substring(0, 19) : '--')}</td>
-          <td>
-            <a href="${escapeHtml(m.torrent_url)}" target="_blank" class="link-action">
+            <a href="${escapeHtml(m.torrent_url)}" target="_blank" class="btn-action">
               <span>Open Link</span>
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             </a>
           </td>
           <td style="text-align: center;">
-            <button class="btn-reset" onclick="confirmResetTorrent(${m.id}, '${escapeHtml(parsed.matchup).replace(/'/g, "\\'")}')">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              <span>Forget</span>
-            </button>
+            <button class="btn-forget" onclick="confirmResetTorrent(${m.id}, '${escapeHtml(m.title).replace(/'/g, "\\'")}')">Forget</button>
           </td>
         </tr>`;
       }).join('');
@@ -2523,8 +2889,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
     function confirmResetTorrent(id, title) {
       openConfirmModal(
-        'Forget Match Record?',
-        `Are you sure you want to remove "${title}" from the grabber database? This will allow the grabber to re-evaluate and re-download it in future cycles.`,
+        `Are you sure you want to remove "${title}" from download history? This allows the grabber to re-evaluate and re-download it in future cycles.`,
         () => resetTorrent(id, title)
       );
     }
@@ -2552,67 +2917,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     document.getElementById('btn-refresh-matches').addEventListener('click', fetchMatches);
     document.getElementById('matches-search').addEventListener('input', renderMatches);
 
-    // Run History Management
-    async function fetchHistory() {
-      const tbody = document.getElementById('history-tbody');
-      try {
-        const res = await fetch('/api/runs');
-        const data = await res.json();
-        const runs = data.runs || [];
-        document.getElementById('tab-count-runs').textContent = runs.length;
-        renderHistory(runs);
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--red); padding: 2rem;">Error loading run history: ${escapeHtml(err.message)}</td></tr>`;
-      }
-    }
-
-    function renderHistory(runs) {
-      const tbody = document.getElementById('history-tbody');
-      if (runs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--muted); padding: 3rem 1rem;">
-          <svg class="icon icon-lg" style="margin-bottom: 0.5rem; opacity: 0.4;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <div>No cycle executions recorded in history yet.</div>
-        </td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = runs.map(r => {
-        let statusTag = 'tag-status-success';
-        if (r.status === 'ERROR') statusTag = 'tag-status-error';
-        else if (r.status === 'NO_TORRENTS') statusTag = 'tag-status-notorrents';
-        else if (r.status === 'RUNNING') statusTag = 'tag-status-running';
-
-        let durationStr = '--';
-        if (r.started_at && r.completed_at) {
-          const s = new Date(r.started_at).getTime();
-          const e = new Date(r.completed_at).getTime();
-          if (!isNaN(s) && !isNaN(e) && e >= s) {
-            durationStr = `${Math.round((e - s) / 1000)}s`;
-          }
-        }
-
-        const errText = r.error_message
-          ? `<span style="color: var(--red); font-size: 0.75rem;">${escapeHtml(r.error_message)}</span>`
-          : '<span style="color: var(--muted); font-size: 0.75rem;">None</span>';
-
-        return `<tr>
-          <td style="color: var(--muted); font-family: 'Fira Code', monospace; font-size: 0.75rem;">#${r.id}</td>
-          <td><span class="tag-badge ${statusTag}">${escapeHtml(r.status)}</span></td>
-          <td><strong style="color: var(--cyan);">${escapeHtml(r.week_title || '--')}</strong></td>
-          <td><span style="font-weight: 700; color: ${r.torrents_added_count > 0 ? 'var(--green)' : 'var(--text-secondary)'}; font-family: 'Fira Code', monospace;">${r.torrents_added_count || 0}</span></td>
-          <td style="color: var(--muted); font-size: 0.75rem; font-family: 'Fira Code', monospace;">${escapeHtml(r.started_at ? r.started_at.replace('T', ' ').substring(0, 19) : '--')}</td>
-          <td style="color: var(--muted); font-size: 0.75rem; font-family: 'Fira Code', monospace;">${escapeHtml(r.completed_at ? r.completed_at.replace('T', ' ').substring(0, 19) : '--')}</td>
-          <td style="font-family: 'Fira Code', monospace; font-size: 0.75rem;">${durationStr}</td>
-          <td>${errText}</td>
-        </tr>`;
-      }).join('');
-    }
-
-    document.getElementById('btn-refresh-history').addEventListener('click', fetchHistory);
-
     // Active Week Match Browser Management
     async function fetchBrowserMatches(forceRefresh = false) {
-      const tbody = document.getElementById('browser-tbody');
       const summary = document.getElementById('browser-summary');
       const refreshBtn = document.getElementById('btn-refresh-browser');
       if (forceRefresh) {
@@ -2636,7 +2942,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         }
       } catch (err) {
         summary.textContent = 'Error fetching active week games.';
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--red); padding: 2rem;">Error: ${escapeHtml(err.message)}</td></tr>`;
+        document.getElementById('browser-cards-container').innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--rose); padding: 3rem;">Error: ${escapeHtml(err.message)}</div>`;
         if (forceRefresh) showToast('Failed to refresh matches: ' + err.message, 'error');
       } finally {
         refreshBtn.disabled = false;
@@ -2645,41 +2951,47 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     function renderBrowserMatches(weekTitle = 'Active Week') {
+      const container = document.getElementById('browser-cards-container');
       const tbody = document.getElementById('browser-tbody');
       const query = (document.getElementById('browser-search').value || '').toLowerCase().trim();
+
       const filtered = browserData.filter(m => {
         const text = `${m.title} ${m.rating || ''}`.toLowerCase();
         return !query || text.includes(query);
       });
 
-      document.getElementById('browser-summary').textContent = `${weekTitle} — Showing ${filtered.length} of ${browserData.length} match(es)`;
+      document.getElementById('browser-summary').textContent = `${weekTitle} &mdash; Showing ${filtered.length} of ${browserData.length} games`;
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 3rem 1rem;">
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 4rem 1rem;">
           <svg class="icon icon-lg" style="margin-bottom: 0.5rem; opacity: 0.4;" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          <div>No games match your search criteria.</div>
-        </td></tr>`;
+          <div>No active week matchups match your search.</div>
+        </div>`;
+        tbody.innerHTML = '';
         return;
       }
 
-      tbody.innerHTML = filtered.map((m, idx) => {
+      container.innerHTML = filtered.map((m, idx) => {
         const ratingVal = parseInt(m.rating, 10);
-        let tagClass = 'tag-high';
-        if (isNaN(ratingVal)) tagClass = 'tag-low';
-        else if (ratingVal < 70) tagClass = 'tag-low';
-        else if (ratingVal < 90) tagClass = 'tag-med';
+        let scoreClass = 'score-high';
+        if (isNaN(ratingVal)) scoreClass = 'score-low';
+        else if (ratingVal < 70) scoreClass = 'score-low';
+        else if (ratingVal < 90) scoreClass = 'score-med';
+
+        const parsed = parseGameRelease(m.title);
+        const awayTeam = resolveTeam(parsed.awayStr);
+        const homeTeam = resolveTeam(parsed.homeStr);
 
         const favBadge = m.is_favorite
-          ? '<span class="tag-badge tag-fav"><svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/></svg> KC Chiefs</span>'
-          : '<span style="color: var(--muted); font-size: 0.72rem;">--</span>';
+          ? `<span class="score-badge" style="background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.5); color: #fbbf24;">⭐ KC Chiefs</span>` : '';
 
-        const ratingBadge = m.rating && m.rating !== 'N/A'
-          ? `<span class="tag-badge ${tagClass}">${escapeHtml(m.rating)} pts</span>`
-          : '<span class="tag-badge tag-low">N/A</span>';
+        const scorePill = m.rating && m.rating !== 'N/A'
+          ? `<span class="score-badge ${scoreClass}"><svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor"/></svg> ${escapeHtml(m.rating)} pts</span>`
+          : `<span class="score-badge score-low">N/A</span>`;
 
         let actionCol = '';
         if (m.is_grabbed) {
-          actionCol = '<span class="badge-success"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Grabbed</span>';
+          actionCol = `<span class="badge-grabbed"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Grabbed</span>`;
         } else {
           const safeUrl = encodeURIComponent(m.url);
           const safeTitle = encodeURIComponent(m.title);
@@ -2691,18 +3003,50 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           </button>`;
         }
 
-        return `<tr>
-          <td style="color: var(--muted); font-family: 'Fira Code', monospace; font-size: 0.75rem;">#${idx + 1}</td>
-          <td>${ratingBadge}</td>
-          <td><strong style="font-weight: 600; color: #fff;">${escapeHtml(m.title)}</strong></td>
-          <td style="text-align: center;">${favBadge}</td>
-          <td>
-            <a href="${escapeHtml(m.url)}" target="_blank" class="link-action">
+        return `<div class="game-card ${m.is_favorite ? 'is-favorite' : ''}">
+          <div class="card-top-bar">
+            <span class="week-pill">${escapeHtml(weekTitle)}</span>
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              ${favBadge}
+              ${scorePill}
+            </div>
+          </div>
+
+          <div class="matchup-box">
+            <div class="team-item">
+              <div class="team-badge" style="background-color: ${awayTeam.color};">${awayTeam.code}</div>
+              <span class="team-name" title="${escapeHtml(awayTeam.name)}">${escapeHtml(awayTeam.name)}</span>
+            </div>
+            <span class="versus-badge">@</span>
+            <div class="team-item home">
+              <span class="team-name" title="${escapeHtml(homeTeam.name)}">${escapeHtml(homeTeam.name)}</span>
+              <div class="team-badge" style="background-color: ${homeTeam.color};">${homeTeam.code}</div>
+            </div>
+          </div>
+
+          <div style="font-size: 0.78rem; font-weight: 500; color: #fff;">${escapeHtml(m.title)}</div>
+
+          <div class="card-footer">
+            <a href="${escapeHtml(m.url)}" target="_blank" class="btn-action">
               <span>View Topic</span>
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             </a>
-          </td>
-          <td style="text-align: center;">${actionCol}</td>
+            ${actionCol}
+          </div>
+        </div>`;
+      }).join('');
+
+      tbody.innerHTML = filtered.map((m, idx) => {
+        const actionHtml = m.is_grabbed
+          ? `<span class="badge-grabbed">Grabbed</span>`
+          : `<button class="btn-grab" onclick="manualDownloadMatch('${encodeURIComponent(m.url)}', '${encodeURIComponent(m.title)}', '${encodeURIComponent(m.rating || '')}', '${encodeURIComponent(weekTitle)}', '')">Download</button>`;
+        return `<tr>
+          <td>#${idx + 1}</td>
+          <td>${escapeHtml(m.rating || 'N/A')}</td>
+          <td>${escapeHtml(m.title)}</td>
+          <td>${m.is_favorite ? 'KC Chiefs' : '--'}</td>
+          <td><a href="${escapeHtml(m.url)}" target="_blank">View Topic</a></td>
+          <td>${actionHtml}</td>
         </tr>`;
       }).join('');
     }
@@ -2727,9 +3071,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         });
         const data = await res.json();
         if (data.ok) {
-          showToast(data.message || `Successfully sent "${title}" to qBittorrent!`, 'success', 5000);
+          showToast(data.message || `Sent "${title}" to qBittorrent!`, 'success', 5000);
           if (btn) {
-            btn.outerHTML = '<span class="badge-success"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Grabbed</span>';
+            btn.outerHTML = `<span class="badge-grabbed"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Grabbed</span>`;
           }
           const item = browserData.find(x => x.url === url || x.title === title);
           if (item) item.is_grabbed = true;
@@ -2739,14 +3083,14 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
           showToast(`Download failed: ${data.error}`, 'error', 6000);
           if (btn) {
             btn.disabled = false;
-            btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Download to qBit</span>';
+            btn.innerHTML = '<span>Download to qBit</span>';
           }
         }
       } catch (err) {
         showToast('Network error triggering download: ' + err.message, 'error');
         if (btn) {
           btn.disabled = false;
-          btn.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Download to qBit</span>';
+          btn.innerHTML = '<span>Download to qBit</span>';
         }
       }
     }
@@ -2754,7 +3098,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     document.getElementById('btn-refresh-browser').addEventListener('click', () => fetchBrowserMatches(true));
     document.getElementById('browser-search').addEventListener('input', () => renderBrowserMatches());
 
-    // Settings Management & Day Chip Helpers
+    // Settings Management
     function toggleDay(inputId, day, el) {
       const input = document.getElementById(inputId);
       let days = input.value.split(',').map(d => d.trim()).filter(Boolean);
@@ -2774,7 +3118,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       const input = document.getElementById(inputId);
       if (!container || !input) return;
       const days = input.value.split(',').map(d => d.trim().toLowerCase()).filter(Boolean);
-      container.querySelectorAll('.day-chip').forEach(chip => {
+      container.querySelectorAll('.day-toggle-chip').forEach(chip => {
         const d = (chip.dataset.day || '').toLowerCase();
         chip.classList.toggle('active', days.includes(d));
       });
@@ -2846,8 +3190,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         status.textContent = 'Configuration loaded from .env';
         setTimeout(() => { status.textContent = ''; }, 3000);
       } catch (err) {
-        status.style.color = 'var(--red)';
-        status.textContent = 'Error loading configuration: ' + err.message;
+        status.style.color = 'var(--rose)';
+        status.textContent = 'Error loading settings: ' + err.message;
         showToast('Error loading configuration: ' + err.message, 'error');
       }
     }
@@ -2856,9 +3200,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       const status = document.getElementById('settings-status');
       const saveBtn = document.getElementById('btn-save-settings');
       saveBtn.disabled = true;
-      saveBtn.innerHTML = '<span>Saving &amp; Reloading...</span>';
+      saveBtn.innerHTML = '<span>Saving...</span>';
       status.style.color = 'var(--cyan)';
-      status.textContent = 'Saving settings to disk...';
+      status.textContent = 'Saving configuration...';
 
       const payload = {
         FAVORITE_TEAMS: document.getElementById('cfg-FAVORITE_TEAMS').value,
@@ -2902,23 +3246,23 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
         });
         const data = await res.json();
         if (data.ok) {
-          showToast(data.message || 'Settings saved and applied successfully!', 'success', 5000);
+          showToast(data.message || 'Settings saved and applied!', 'success', 5000);
           status.style.color = 'var(--green)';
           status.textContent = 'Settings saved and applied successfully!';
           loadSettings();
           fetchStatus();
         } else {
           showToast('Error saving settings: ' + (data.error || 'Unknown error'), 'error', 6000);
-          status.style.color = 'var(--red)';
+          status.style.color = 'var(--rose)';
           status.textContent = 'Error: ' + data.error;
         }
       } catch (err) {
         showToast('Network error saving settings: ' + err.message, 'error');
-        status.style.color = 'var(--red)';
+        status.style.color = 'var(--rose)';
         status.textContent = 'Network error: ' + err.message;
       } finally {
         saveBtn.disabled = false;
-        saveBtn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Save &amp; Apply Settings</span>';
+        saveBtn.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>Save &amp; Hot-Reload</span>';
       }
     }
 
@@ -2957,19 +3301,15 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 
         if (previousCycleRunning && !isCycleRunning) {
           fetchMatches();
-          fetchHistory();
         }
         previousCycleRunning = isCycleRunning;
-      } catch (err) {
-        // Silently keep current display on transient connection error
-      }
+      } catch (err) {}
     }
 
-    // Initial load and periodic status polling (every 3s)
+    // Initialize
     fetchStatus();
     fetchMatches();
     fetchBrowserMatches();
-    fetchHistory();
     setInterval(fetchStatus, 3000);
   </script>
 </body>
