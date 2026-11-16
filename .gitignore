@@ -20,6 +20,7 @@ data/
 .DS_Store
 .idea/
 .vscode/
+.agents/
 
 # Docker Local Overrides
 docker-compose.override.yml
