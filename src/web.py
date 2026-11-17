@@ -626,15 +626,16 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .brand-emblem {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: var(--radius-md);
       background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+      flex-shrink: 0;
     }
 
     .brand-meta {
@@ -1188,33 +1189,34 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     }
 
     .team-badge {
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(15, 21, 35, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 3px;
+      background: rgba(15, 21, 35, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      padding: 4px;
       flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
       position: relative;
       overflow: hidden;
-      transition: transform 0.15s ease;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
     }
 
     .team-badge:hover {
-      transform: scale(1.08);
-      border-color: rgba(255, 255, 255, 0.25);
+      transform: scale(1.1);
+      border-color: rgba(56, 189, 248, 0.5);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
     }
 
     .team-logo-img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
       pointer-events: none;
     }
 
@@ -1226,27 +1228,29 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 0.72rem;
+      font-size: 0.95rem;
       color: #fff;
     }
 
     .team-name {
-      font-size: 0.86rem;
+      font-size: 0.94rem;
       font-weight: 700;
       color: #fff;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      letter-spacing: -0.01em;
     }
 
     .versus-badge {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       font-weight: 800;
       color: var(--muted);
       text-transform: uppercase;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.25);
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       flex-shrink: 0;
     }
 
@@ -1916,8 +1920,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       }
 
       .brand-emblem {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
       }
 
       .brand-title {
@@ -2075,27 +2079,32 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       }
 
       .matchup-box {
-        padding: 0.65rem 0.75rem;
-        gap: 0.45rem;
+        padding: 0.7rem 0.75rem;
+        gap: 0.5rem;
       }
 
       .team-item {
-        gap: 0.45rem;
+        gap: 0.5rem;
         min-width: 0;
       }
 
       .team-badge {
-        width: 30px;
-        height: 30px;
-        font-size: 0.68rem;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        padding: 3.5px;
       }
 
-      .team-name {
+      .team-fallback-initials {
         font-size: 0.82rem;
       }
 
+      .team-name {
+        font-size: 0.84rem;
+      }
+
       .versus-badge {
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         padding: 0.15rem 0.35rem;
       }
 
@@ -2992,7 +3001,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
     // State
     let matchesData = [];
     let browserData = [];
-    let activeWeekFilter = 'all';
+    let activeWeekFilter = null;
     let currentViewMode = 'grid'; // 'grid' | 'table'
     let previousCycleRunning = false;
     let pendingConfirmAction = null;
@@ -3265,9 +3274,42 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
       }
     }
 
+    function parseWeekSortValue(weekStr) {
+      if (!weekStr) return -1;
+      const s = String(weekStr).trim();
+      const m = s.match(/week\s*(\d+)/i);
+      if (m) return parseInt(m[1], 10);
+      const lower = s.toLowerCase();
+      if (lower.includes('super bowl')) return 100;
+      if (lower.includes('conference')) return 90;
+      if (lower.includes('divisional')) return 80;
+      if (lower.includes('wild card')) return 70;
+      if (lower.includes('preseason')) {
+        const pm = s.match(/\d+/);
+        return pm ? parseInt(pm[0], 10) - 20 : -10;
+      }
+      const anyNum = s.match(/\d+/);
+      if (anyNum) return parseInt(anyNum[0], 10);
+      return 0;
+    }
+
     function updateWeekFilterChips() {
       const container = document.getElementById('week-filter-chips');
-      const weeks = [...new Set(matchesData.map(m => m.week).filter(Boolean))];
+      const weeks = [...new Set(matchesData.map(m => m.week).filter(Boolean))].sort((a, b) => parseWeekSortValue(a) - parseWeekSortValue(b));
+
+      if (weeks.length === 0) {
+        container.innerHTML = '';
+        activeWeekFilter = 'all';
+        return;
+      }
+
+      // Default to last/latest week if not yet set, or if previously selected week is gone
+      if (activeWeekFilter === null) {
+        activeWeekFilter = weeks[weeks.length - 1];
+      } else if (activeWeekFilter !== 'all' && !weeks.includes(activeWeekFilter)) {
+        activeWeekFilter = weeks[weeks.length - 1];
+      }
+
       if (weeks.length <= 1) {
         container.innerHTML = '';
         return;
